@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import QRCode from "qrcode";
 import Image from "next/image";
+import { createTable } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 
 interface Table {
   id: string;
@@ -311,17 +313,28 @@ function AddTableModal({
   branches: Branch[];
   existing: Table[];
 }) {
+  const router = useRouter();
   const [branchId, setBranchId] = useState(branches[0]?.id ?? 1);
   const branchTables = existing.filter((t) => t.branchId === branchId);
   const nextNum = branchTables.length
     ? Math.max(...branchTables.map((t) => t.tableNumber)) + 1
     : 1;
   const [number, setNumber] = useState(nextNum);
+  const [saving, setSaving] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Call server action to add table
-    onClose();
+    setSaving(true);
+    try {
+      await createTable(branchId, number);
+      router.refresh();
+      onClose();
+    } catch (err) {
+      console.error("Failed to create table:", err);
+      alert("فشل في إضافة الطاولة. حاول مرة أخرى.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -391,9 +404,12 @@ function AddTableModal({
             <button type="button" onClick={onClose} className="btn-ghost text-sm">
               إلغاء
             </button>
-            <button type="submit" className="btn-primary text-sm">
-              <Plus className="h-4 w-4" />
-              إضافة الطاولة
+            <button type="submit" disabled={saving} className="btn-primary text-sm">
+              {saving ? (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-paper/30 border-t-paper" />
+              ) : (
+                <><Plus className="h-4 w-4" /> إضافة الطاولة</>
+              )}
             </button>
           </div>
         </form>
