@@ -10,7 +10,7 @@ export default async function TablesPage() {
     data: { user },
     error,
   } = await supabase.auth.getUser();
-  if (error || !user) redirect("/admin/login");
+  if (error || !user) redirect("/login");
 
   const [tables, branches] = await Promise.all([
     prisma.restaurantTable.findMany({

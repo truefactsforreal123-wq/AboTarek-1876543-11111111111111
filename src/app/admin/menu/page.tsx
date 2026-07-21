@@ -10,7 +10,7 @@ export default async function MenuPage() {
     data: { user },
     error,
   } = await supabase.auth.getUser();
-  if (error || !user) redirect("/admin/login");
+  if (error || !user) redirect("/login");
 
   const categories = await prisma.category.findMany({
     orderBy: { order: "asc" },

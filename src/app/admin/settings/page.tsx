@@ -10,7 +10,7 @@ export default async function SettingsPage() {
     data: { user },
     error,
   } = await supabase.auth.getUser();
-  if (error || !user) redirect("/admin/login");
+  if (error || !user) redirect("/login");
 
   const settings = await prisma.systemSetting.findMany();
   const settingsMap: Record<string, unknown> = {};

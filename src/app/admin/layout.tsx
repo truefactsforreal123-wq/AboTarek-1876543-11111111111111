@@ -11,7 +11,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       error,
     } = await supabase.auth.getUser();
 
-    if (error || !user) redirect("/admin/login");
+    if (error || !user) redirect("/login");
 
     const [soundSetting, tables] = await Promise.all([
       prisma.systemSetting
@@ -36,6 +36,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </UnseenOrdersProvider>
     );
   } catch {
-    redirect("/admin/login");
+    redirect("/login");
   }
 }
