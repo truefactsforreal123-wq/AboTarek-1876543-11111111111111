@@ -2,13 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ExternalLink, Globe, Phone } from "lucide-react";
 import { navItems, siteConfig } from "@/lib/data";
 import { logo } from "@/lib/assets";
 import { useLanguage } from "./language-provider";
 
 export function SiteFooter() {
+  const pathname = usePathname();
   const { locale, t } = useLanguage();
+
+  if (pathname.startsWith("/admin") || pathname.startsWith("/table")) return null;
 
   return (
     <footer className="site-footer">

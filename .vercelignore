@@ -1,0 +1,15 @@
+# Tooling folders (not part of the app)
+.opencode
+claude-skills
+supabase/.temp
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+
+# Linux-style gitignore
+node_modules
+.next

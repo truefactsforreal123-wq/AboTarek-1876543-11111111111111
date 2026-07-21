@@ -15,6 +15,8 @@ export function SiteHeader() {
   const { locale, toggleLocale, t } = useLanguage();
   const [open, setOpen] = useState(false);
 
+  if (pathname.startsWith("/admin") || pathname.startsWith("/table")) return null;
+
   return (
     <header className="site-header">
       <Link href="/" className="brand-lockup" aria-label="Abo Tarek home">
