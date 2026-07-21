@@ -216,6 +216,7 @@ export async function approveReview(id: number) {
     data: { approved: true },
   });
   revalidatePath("/admin/reviews");
+  revalidatePath("/reviews");
   revalidatePath("/");
   return review;
 }
@@ -224,6 +225,7 @@ export async function deleteReview(id: number) {
   await requireAuth();
   await prisma.review.delete({ where: { id } });
   revalidatePath("/admin/reviews");
+  revalidatePath("/reviews");
   revalidatePath("/");
 }
 

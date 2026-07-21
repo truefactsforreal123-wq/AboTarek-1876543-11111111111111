@@ -1,4 +1,5 @@
 import { siteConfig, branches } from "@/lib/data";
+import { logo } from "@/lib/assets";
 
 export function RestaurantStructuredData() {
   const data = {
@@ -7,8 +8,8 @@ export function RestaurantStructuredData() {
     name: siteConfig.name.ar,
     alternateName: siteConfig.name.en,
     url: siteConfig.siteUrl,
-    logo: siteConfig.images.logo,
-    image: siteConfig.images.logo,
+    logo: new URL(logo.src, siteConfig.siteUrl).toString(),
+    image: new URL(logo.src, siteConfig.siteUrl).toString(),
     description: "كشري أبو طارك — طبقات بسيطة، طعم مش بيتنسي. من قلب القاهرة منذ 1950.",
     servesCuisine: ["Egyptian", "Koshari"],
     aggregateRating: {

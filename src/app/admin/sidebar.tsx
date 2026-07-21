@@ -22,6 +22,7 @@ import { useState } from "react";
 import { useAdminT } from "@/lib/use-admin-t";
 import { switchAdminLang } from "@/lib/admin-strings";
 import { useUnseenOrders } from "./UnseenOrdersProvider";
+import { logo } from "@/lib/assets";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -54,7 +55,7 @@ export function Sidebar() {
   const navContent = (
     <>
       <div className="flex items-center gap-3 border-b border-white/8 px-5 py-5">
-        <Image src="/logo.png" alt="" width={40} height={40} className="rounded-full" />
+         <Image src={logo} alt="" width={40} height={40} className="rounded-full" />
         <span className="text-sm font-black text-cream">{ta.adminPanel}</span>
       </div>
       <nav className="flex-1 space-y-1 p-3">

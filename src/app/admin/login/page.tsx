@@ -1,10 +1,12 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import { Flame, Lock, Mail, ArrowLeft, AlertCircle } from "lucide-react";
+import { Lock, Mail, ArrowLeft, AlertCircle } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { founder, logo } from "@/lib/assets";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -38,15 +40,16 @@ export default function AdminLogin() {
     <div className="flex min-h-screen" dir="rtl">
       {/* left — portrait side */}
       <div className="relative hidden w-1/2 overflow-hidden bg-ink-950 lg:block">
-        <img
-          src="/founder.jpg"
+        <Image
+          src={founder}
           alt="أبو طارك"
+          fill
           className="absolute inset-0 h-full w-full object-cover opacity-40"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/60 to-transparent" />
         <div className="relative flex h-full flex-col justify-between p-12">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="logo" className="h-12 w-12 rounded-md bg-paper p-1" />
+            <Image src={logo} alt="شعار كشري أبو طارك" className="h-12 w-12 rounded-md bg-paper p-1" />
             <div className="leading-tight text-paper">
               <div className="text-lg font-extrabold">كشري أبو طارك</div>
               <div className="text-xs font-bold tracking-[0.2em] text-saffron-400">EST. 1950</div>
@@ -68,7 +71,7 @@ export default function AdminLogin() {
         <div className="w-full max-w-sm">
           {/* mobile brand */}
           <div className="mb-10 flex items-center gap-3 lg:hidden">
-            <img src="/logo.png" alt="logo" className="h-12 w-12 rounded-md bg-paper p-1 shadow" />
+            <Image src={logo} alt="شعار كشري أبو طارك" className="h-12 w-12 rounded-md bg-paper p-1 shadow" />
             <div className="leading-tight">
               <div className="text-lg font-extrabold text-ink-900">كشري أبو طارك</div>
               <div className="text-xs font-bold tracking-[0.2em] text-tomato-600">لوحة الإدارة</div>
@@ -141,12 +144,12 @@ export default function AdminLogin() {
             </button>
           </form>
 
-          <a
+          <Link
             href="/"
             className="mt-6 inline-block text-xs font-bold text-cobalt-700 underline underline-offset-4"
           >
             ← العودة للموقع
-          </a>
+          </Link>
         </div>
       </div>
     </div>

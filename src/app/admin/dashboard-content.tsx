@@ -77,6 +77,7 @@ export function DashboardContent({ userEmail, stats, recentOrders }: Props) {
             لوحة التحكم
           </div>
           <h1 className="mt-2 text-3xl font-extrabold text-ink-900">مرحباً 👋</h1>
+          {userEmail && <p className="mt-1 text-sm text-ink-700/50" dir="ltr">{userEmail}</p>}
         </div>
         <div className="text-sm text-ink-700/60">
           {new Date().toLocaleDateString("ar-EG", { weekday: "long", day: "numeric", month: "long" })}

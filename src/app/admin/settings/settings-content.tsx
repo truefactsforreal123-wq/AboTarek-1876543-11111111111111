@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Save, Bell, Clock, Eye, Volume2, Check } from "lucide-react";
+import { Save, Clock, Eye, Volume2, Check } from "lucide-react";
 
 function Toggle({
   on,
@@ -31,7 +31,7 @@ function Toggle({
 }
 
 interface Props {
-  initialSettings: Record<string, any>;
+  initialSettings: Record<string, unknown>;
 }
 
 export function SettingsContent({ initialSettings }: Props) {

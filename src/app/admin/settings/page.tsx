@@ -13,7 +13,7 @@ export default async function SettingsPage() {
   if (error || !user) redirect("/admin/login");
 
   const settings = await prisma.systemSetting.findMany();
-  const settingsMap: Record<string, any> = {};
+  const settingsMap: Record<string, unknown> = {};
   for (const s of settings) settingsMap[s.key] = s.value;
 
   return (

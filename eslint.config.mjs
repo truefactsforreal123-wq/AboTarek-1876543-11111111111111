@@ -15,6 +15,9 @@ const eslintConfig = defineConfig([
     // Utility scripts (not app code)
     "menu-images/**",
     "scripts/**",
+    ".opencode/**",
+    "claude-skills/**",
+    "supabase/.temp/**",
   ]),
 ]);
 

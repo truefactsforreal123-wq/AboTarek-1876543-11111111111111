@@ -22,7 +22,7 @@ interface Props {
 }
 
 export function BranchesPageContent({ branches }: Props) {
-  const { locale, t } = useLanguage();
+  const { locale } = useLanguage();
 
   return (
     <main id="main-content" className="inner-page branches-page">

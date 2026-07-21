@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import {
   Search,
   Plus,
@@ -24,6 +25,12 @@ interface MenuItem {
   image: string;
   badge: string | null;
   available: boolean;
+  sizes: unknown;
+}
+
+interface AdminMenuItem extends MenuItem {
+  categoryId: number;
+  categoryName: string;
 }
 
 interface Category {
@@ -38,19 +45,19 @@ interface Props {
 }
 
 export function MenuContent({ categories }: Props) {
-  const [items, setItems] = useState<MenuItem[]>(() =>
+  const [items, setItems] = useState<AdminMenuItem[]>(() =>
     categories.flatMap((c) => c.items.map((it) => ({ ...it, categoryId: c.id, categoryName: c.nameAr })))
   );
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState<number | "all">("all");
-  const [editing, setEditing] = useState<MenuItem | null>(null);
+  const [editing, setEditing] = useState<AdminMenuItem | null>(null);
   const [adding, setAdding] = useState(false);
 
   const cats = categories.map((c) => ({ id: c.id, name: c.nameAr }));
 
   const filtered = useMemo(() => {
     return items.filter((it) => {
-      const matchesCat = cat === "all" || (it as any).categoryId === cat;
+      const matchesCat = cat === "all" || it.categoryId === cat;
       const matchesQuery =
         !query || it.nameAr.includes(query) || it.descAr.includes(query);
       return matchesCat && matchesQuery;
@@ -70,7 +77,7 @@ export function MenuContent({ categories }: Props) {
     setItems((prev) => prev.filter((it) => it.id !== id));
   };
 
-  const saveItem = (updated: MenuItem) => {
+  const saveItem = (updated: AdminMenuItem) => {
     setItems((prev) => prev.map((it) => (it.id === updated.id ? updated : it)));
     setEditing(null);
   };
@@ -148,9 +155,11 @@ export function MenuContent({ categories }: Props) {
                 {/* name + image */}
                 <div className="col-span-2 flex items-center gap-3 sm:col-span-5">
                   {it.image ? (
-                    <img
+                    <Image
                       src={it.image}
                       alt={it.nameAr}
+                      width={48}
+                      height={48}
                       className="h-12 w-12 shrink-0 rounded-md object-cover"
                     />
                   ) : (
@@ -178,11 +187,11 @@ export function MenuContent({ categories }: Props) {
                 </div>
                 {/* category */}
                 <div className="col-span-1 text-xs text-ink-700/60 sm:col-span-2">
-                  {(it as any).categoryName}
+                  {it.categoryName}
                 </div>
                 {/* price */}
                 <div className="col-span-1 text-sm font-extrabold tabular-nums text-tomato-600 sm:col-span-2">
-                  {it.price ? `${it.price} ج` : `${(it as any).sizes?.[0]?.price ?? 0}+`}
+                  {it.price ? `${it.price} ج` : `${getFirstSizePrice(it.sizes) ?? 0}+`}
                 </div>
                 {/* status */}
                 <div className="col-span-1 sm:col-span-1">
@@ -248,10 +257,10 @@ function EditModal({
   onClose,
   onSave,
 }: {
-  item: MenuItem | null;
+  item: AdminMenuItem | null;
   categories: { id: number; name: string }[];
   onClose: () => void;
-  onSave: (it: MenuItem) => void;
+  onSave: (it: AdminMenuItem) => void;
 }) {
   const [nameAr, setNameAr] = useState(item?.nameAr ?? "");
   const [descAr, setDescAr] = useState(item?.descAr ?? "");
@@ -270,6 +279,9 @@ function EditModal({
       badge,
       image: item?.image ?? "",
       available: item?.available ?? true,
+      sizes: item?.sizes ?? null,
+      categoryId: item?.categoryId ?? categories[0]?.id ?? 0,
+      categoryName: item?.categoryName ?? categories[0]?.name ?? "",
     });
   };
 
@@ -362,4 +374,11 @@ function EditModal({
       </motion.div>
     </>
   );
+}
+
+function getFirstSizePrice(sizes: unknown): number | null {
+  if (!Array.isArray(sizes)) return null;
+  const first = sizes[0];
+  if (!first || typeof first !== "object" || !("price" in first)) return null;
+  return typeof first.price === "number" ? first.price : null;
 }

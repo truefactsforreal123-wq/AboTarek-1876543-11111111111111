@@ -21,7 +21,6 @@ export const siteConfig = {
   images: {
     hero: `${S}/koshari/classic.jpg`,
     about: `${S}/koshari/meat.jpg`,
-    logo: "/logo.png",
   },
 } as const;
 

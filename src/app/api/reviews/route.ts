@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     branchId = parsedBranchId;
   }
 
-  const where: Record<string, unknown> = {};
+  const where: Record<string, unknown> = { approved: true };
   if (branchId !== null) where.branchId = branchId;
 
   const reviews = await prisma.review.findMany({

@@ -13,6 +13,7 @@ import { useRef } from "react";
 import { useLanguage } from "@/components/language-provider";
 import { Reveal } from "@/components/motion";
 import { Preloader } from "@/components/preloader";
+import { founder } from "@/lib/assets";
 
 interface MenuItem {
   id: number;
@@ -40,10 +41,9 @@ interface SiteConfig {
 interface Props {
   siteConfig: SiteConfig;
   featuredItems: MenuItem[];
-  branchCount: number;
 }
 
-export function HomePageContent({ siteConfig, featuredItems, branchCount }: Props) {
+export function HomePageContent({ siteConfig, featuredItems }: Props) {
   const { locale, t } = useLanguage();
   const heroRef = useRef<HTMLElement>(null);
   const reduceMotion = useReducedMotion();
@@ -177,7 +177,7 @@ export function HomePageContent({ siteConfig, featuredItems, branchCount }: Prop
 
         <section className="signature-section" aria-labelledby="signature-title">
           <div className="signature-photo depth-3" data-depth="3">
-            <Image src="/founder.jpg" alt={locale === "ar" ? "أبو طارق، مؤسس المطعم" : "Abo Tarek, founder of the restaurant"} fill sizes="(max-width: 800px) 100vw, 52vw" />
+            <Image src={founder} alt={locale === "ar" ? "أبو طارق، مؤسس المطعم" : "Abo Tarek, founder of the restaurant"} fill sizes="(max-width: 800px) 100vw, 52vw" />
             <div className="photo-caption">ARCHIVE / CAIRO</div>
           </div>
           <div className="signature-copy depth-4" data-depth="4">

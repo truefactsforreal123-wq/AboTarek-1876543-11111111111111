@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/components/language-provider";
 import { copy } from "@/lib/copy";
 import { siteConfig } from "@/lib/data";
+import { logo } from "@/lib/assets";
 
 
 export function Navbar() {
@@ -36,7 +37,7 @@ export function Navbar() {
     <header className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${scrolled ? "border-white/8 bg-ink-950/90 py-2 shadow-2xl backdrop-blur-xl" : "border-transparent bg-transparent py-4"}`}>
       <nav className="container-x flex items-center justify-between gap-4" aria-label={language === "ar" ? "القائمة الرئيسية" : "Main navigation"}>
         <Link href="/" className="flex min-h-11 items-center gap-3" aria-label={c.loading} onClick={() => setOpen(false)}>
-          <Image src="/logo.png" alt="" width={48} height={48} priority className="h-12 w-12 rounded-full object-cover shadow-red-glow" />
+           <Image src={logo} alt="" width={48} height={48} priority className="h-12 w-12 rounded-full object-cover shadow-red-glow" />
           <span className="hidden text-base font-black text-cream sm:block">{c.loading}</span>
         </Link>
         <div className="hidden items-center gap-6 lg:flex">

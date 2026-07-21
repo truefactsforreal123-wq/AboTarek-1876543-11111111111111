@@ -29,7 +29,7 @@ interface Props {
 }
 
 export function MenuPageContent({ categories }: Props) {
-  const { locale, t } = useLanguage();
+  const { locale } = useLanguage();
   const [activeCategory, setActiveCategory] = useState("all");
   const deferredCategory = useDeferredValue(activeCategory);
   const reduceMotion = useReducedMotion();

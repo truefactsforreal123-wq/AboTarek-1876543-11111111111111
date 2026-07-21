@@ -7,6 +7,7 @@ import { useLanguage, type Language } from "@/components/language-provider";
 import { Reveal, SectionHeading } from "@/components/site-primitives";
 import { copy } from "@/lib/copy";
 import { branches as fallbackBranches, gallery, siteConfig, type LocalizedText } from "@/lib/data";
+import { logo } from "@/lib/assets";
 
 type PrismaBranch = {
   number: string;
@@ -122,7 +123,7 @@ export function Footer() {
   return (
     <footer className="border-t border-white/8 bg-[#090404] pt-16">
       <div className="container-x grid gap-9 pb-10 sm:gap-12 sm:pb-12 md:grid-cols-[1.2fr_0.8fr_0.9fr]">
-        <div className="text-start"><div className="flex items-center gap-4"><Image src="/logo.png" alt={c.loading} width={80} height={80} className="h-20 w-20 rounded-full object-cover" /><strong className="text-xl font-black text-cream">{c.loading}</strong></div><p className="mt-5 max-w-md text-sm leading-7 text-cream/55">{c.footerText}</p><a href={siteConfig.facebook} target="_blank" rel="noreferrer" className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-black text-gold-300 hover:text-gold-200"><Share2 size={17} /> {c.follow}</a></div>
+        <div className="text-start"><div className="flex items-center gap-4"><Image src={logo} alt={c.loading} width={80} height={80} className="h-20 w-20 rounded-full object-cover" /><strong className="text-xl font-black text-cream">{c.loading}</strong></div><p className="mt-5 max-w-md text-sm leading-7 text-cream/55">{c.footerText}</p><a href={siteConfig.facebook} target="_blank" rel="noreferrer" className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-black text-gold-300 hover:text-gold-200"><Share2 size={17} /> {c.follow}</a></div>
         <div className="text-start"><h3 className="text-base font-black text-cream">{c.quickLinks}</h3><div className="mt-5 grid gap-2">{c.nav.slice(1).map(([label, href]) => <a key={href} href={href} className="flex min-h-10 items-center text-sm font-semibold text-cream/55 hover:text-gold-300">{label}</a>)}</div></div>
         <div className="text-start"><h3 className="text-base font-black text-cream">{c.hours}</h3><p className="mt-5 flex items-start gap-3 text-sm leading-7 text-cream/60"><Clock3 size={18} className="mt-1 shrink-0 text-gold-300" /> {c.hoursValue}</p><a href={`tel:${siteConfig.contact.primaryPhone}`} className="brand-button mt-6"><Phone size={17} /> {c.call}</a></div>
       </div>

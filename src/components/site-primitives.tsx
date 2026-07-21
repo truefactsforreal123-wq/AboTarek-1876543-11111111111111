@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-mot
 import { Flame } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { logo } from "@/lib/assets";
 
 export function Reveal({
   children,
@@ -149,7 +150,7 @@ export function Preloader({ label }: { label: string }) {
                 />
               )}
               <Image
-                src="/logo.png"
+                src={logo}
                 alt=""
                 width={208}
                 height={208}

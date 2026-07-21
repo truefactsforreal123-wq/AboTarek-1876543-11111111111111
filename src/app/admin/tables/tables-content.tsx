@@ -14,6 +14,7 @@ import {
   Store,
 } from "lucide-react";
 import QRCode from "qrcode";
+import Image from "next/image";
 
 interface Table {
   id: string;
@@ -49,7 +50,7 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
   const branchName = (id: number) =>
     branches.find((b) => b.id === id)?.nameAr ?? "—";
 
-  const regenerate = (id: string) => {
+  const regenerate = () => {
     if (!confirm("إعادة توليد الرمز ستبطل الرمز القديم. متأكد؟")) return;
     // TODO: Call server action to regenerate token
   };
@@ -208,7 +209,7 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
                 QR
               </button>
               <button
-                onClick={() => regenerate(t.id)}
+                 onClick={regenerate}
                 className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-2 text-xs font-bold text-saffron-700 transition-colors hover:bg-saffron-50"
               >
                 <RefreshCw className="h-3.5 w-3.5" />
@@ -259,7 +260,7 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
               </h2>
               <div className="mt-6 inline-block rounded-lg border-2 border-ink-900 bg-paper p-4">
                 {qrDataUrl ? (
-                  <img src={qrDataUrl} alt={`QR Code - Table ${qrModal.tableNumber}`} width={200} height={200} />
+                  <Image src={qrDataUrl} alt={`QR Code - Table ${qrModal.tableNumber}`} width={200} height={200} unoptimized />
                 ) : (
                   <div className="h-[200px] w-[200px] animate-pulse bg-paper-warm" />
                 )}

@@ -8,6 +8,7 @@ import { useLanguage } from "@/components/language-provider";
 import { Counter } from "@/components/site-primitives";
 import { copy } from "@/lib/copy";
 import { siteConfig } from "@/lib/data";
+import { logo } from "@/lib/assets";
 
 const embers = Array.from({ length: 26 }, (_, index) => ({
   left: `${(index * 37) % 100}%`,
@@ -69,7 +70,7 @@ export function Hero({ stats }: { stats?: { branches: number; followers: number;
         <motion.div className="relative hidden justify-self-end md:block" initial={reducedMotion ? false : { opacity: 0, scale: 0.68, rotate: -16 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ delay: 0.48, duration: 0.9, ease: [0.22, 1, 0.36, 1] }} data-depth="3">
           <div className="spin-slow absolute -inset-7 rounded-full border border-dashed border-gold-300/35" aria-hidden="true" />
           <div className="absolute -inset-10 rounded-full bg-brand-600/24 blur-3xl" aria-hidden="true" />
-          <Image src="/logo.png" alt={c.loading} width={390} height={390} priority className="logo-float relative h-[310px] w-[310px] rounded-full object-cover shadow-gold-glow lg:h-[390px] lg:w-[390px]" />
+          <Image src={logo} alt={c.loading} width={390} height={390} priority className="logo-float relative h-[310px] w-[310px] rounded-full object-cover shadow-gold-glow lg:h-[390px] lg:w-[390px]" />
         </motion.div>
       </div>
       <a href="#story" className="absolute bottom-5 start-1/2 z-20 hidden -translate-x-1/2 text-cream/45 md:block" aria-label={language === "ar" ? "انزل للمحتوى" : "Scroll to content"}><ChevronDown className="animate-bounce" size={25} /></a>
