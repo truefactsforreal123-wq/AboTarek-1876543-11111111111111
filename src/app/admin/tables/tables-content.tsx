@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import QRCode from "qrcode";
 import Image from "next/image";
-import { createTable, toggleTableActive, deleteTable, regenerateTableToken } from "@/lib/actions";
+import { createTable, generateTables, toggleTableActive, deleteTable, regenerateTableToken } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { DownloadTableQRPDF } from "@/components/download-table-qr-pdf";
 import { DownloadAllQRPDF } from "@/components/download-all-qr-pdf";
@@ -139,7 +139,7 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
           </button>
           <button onClick={() => setAddOpen(true)} className="btn-primary text-sm">
             <Plus className="h-4 w-4" />
-            طاولة جديدة
+            طاولات جديدة
           </button>
         </div>
       </div>
@@ -336,18 +336,23 @@ function AddTableModal({
     ? Math.max(...branchTables.map((t) => t.tableNumber)) + 1
     : 1;
   const [number, setNumber] = useState(nextNum);
+  const [count, setCount] = useState(1);
   const [saving, setSaving] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     try {
-      await createTable(branchId, number);
+      if (count === 1) {
+        await createTable(branchId, number);
+      } else {
+        await generateTables(branchId, number, count);
+      }
       router.refresh();
       onClose();
     } catch (err) {
-      console.error("Failed to create table:", err);
-      alert("فشل في إضافة الطاولة. حاول مرة أخرى.");
+      console.error("Failed to create table(s):", err);
+      alert("فشل في إضافة الطاولات. حاول مرة أخرى.");
     } finally {
       setSaving(false);
     }
@@ -371,7 +376,7 @@ function AddTableModal({
         dir="rtl"
       >
         <div className="flex items-center justify-between border-b border-admin-border px-6 py-4">
-          <h2 className="text-lg font-extrabold text-admin-text">طاولة جديدة</h2>
+          <h2 className="text-lg font-extrabold text-admin-text">طاولات جديدة</h2>
           <button onClick={onClose} className="rounded-md p-1.5 text-admin-text-muted hover:bg-admin-surface-hover">
             <X className="h-5 w-5" />
           </button>
@@ -398,24 +403,46 @@ function AddTableModal({
               ))}
             </select>
           </div>
-          <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-admin-text-muted">
-              رقم الطاولة
-            </label>
-            <input
-              type="number"
-              value={number}
-              onChange={(e) => setNumber(Number(e.target.value))}
-              min={1}
-              required
-              className="w-full rounded-md border border-admin-border bg-admin-input-bg py-2.5 px-3 text-sm outline-none focus:border-brand-500"
-              dir="ltr"
-            />
-            <p className="mt-1.5 flex items-center gap-1.5 text-xs text-admin-text-muted/60">
-              <Store className="h-3 w-3" />
-              سيُولّد رمز QR تلقائياً عند الحفظ.
-            </p>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-admin-text-muted">
+                رقم الطاولة
+              </label>
+              <input
+                type="number"
+                value={number}
+                onChange={(e) => setNumber(Number(e.target.value))}
+                min={1}
+                required
+                className="w-full rounded-md border border-admin-border bg-admin-input-bg py-2.5 px-3 text-sm outline-none focus:border-brand-500"
+                dir="ltr"
+              />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-admin-text-muted">
+                العدد
+              </label>
+              <input
+                type="number"
+                value={count}
+                onChange={(e) => setCount(Math.max(1, Math.min(50, Number(e.target.value))))}
+                min={1}
+                max={50}
+                required
+                className="w-full rounded-md border border-admin-border bg-admin-input-bg py-2.5 px-3 text-sm outline-none focus:border-brand-500"
+                dir="ltr"
+              />
+            </div>
           </div>
+          {count > 1 && (
+            <p className="text-xs text-admin-text-muted">
+              سيتم إنشاء طاولات من رقم {number} إلى {number + count - 1}
+            </p>
+          )}
+          <p className="flex items-center gap-1.5 text-xs text-admin-text-muted/60">
+            <Store className="h-3 w-3" />
+            سيُولّد رمز QR تلقائياً لكل طاولة.
+          </p>
           <div className="flex justify-end gap-3 pt-3">
             <button type="button" onClick={onClose} className="btn-ghost text-sm">
               إلغاء
@@ -424,7 +451,7 @@ function AddTableModal({
               {saving ? (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-paper/30 border-t-paper" />
               ) : (
-                <><Plus className="h-4 w-4" /> إضافة الطاولة</>
+                <><Plus className="h-4 w-4" /> {count === 1 ? "إضافة الطاولة" : `إضافة ${count} طاولات`}</>
               )}
             </button>
           </div>

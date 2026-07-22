@@ -4,6 +4,7 @@ import { Cairo } from "next/font/google";
 import { LanguageProvider } from "@/components/language-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { OrderAlertAudioUnlock } from "./OrderAlertAudioUnlock";
 import "./globals.css";
 
 const cairo = Cairo({ subsets: ["arabic", "latin"], display: "swap", variable: "--font-cairo" });
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ar" dir="rtl" className={cairo.variable} suppressHydrationWarning>
       <body>
+        <OrderAlertAudioUnlock />
         <LanguageProvider>
           <a className="skip-link" href="#main-content">Skip to content</a>
           <SiteHeader />

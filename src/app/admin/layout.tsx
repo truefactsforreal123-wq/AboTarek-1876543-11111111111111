@@ -39,7 +39,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         branchName: table.branch.nameEn,
       }))}
     >
-      {children}
+      <div style={{ color: '#111827' }}>
+        {children}
+      </div>
     </UnseenOrdersProvider>
   );
 }
