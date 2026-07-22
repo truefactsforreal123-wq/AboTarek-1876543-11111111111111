@@ -88,7 +88,7 @@ export function DownloadAllQRPDF({
     <button
       onClick={downloadAll}
       disabled={loading || tables.length === 0}
-      className="flex items-center gap-1.5 rounded-lg bg-gold-500/10 px-3 py-2 text-xs font-bold text-gold-300 hover:bg-gold-500/20 transition-colors disabled:opacity-40"
+      className="flex items-center gap-1.5 rounded-lg bg-brand-50 px-3 py-2 text-xs font-bold text-brand-600 hover:bg-brand-100 transition-colors disabled:opacity-40"
     >
       <Download size={14} />
       {loading ? "..." : `Download QR (${tables.length})`}

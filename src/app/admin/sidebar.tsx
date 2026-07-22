@@ -42,9 +42,9 @@ export function Sidebar() {
 
   function linkClass(href: string) {
     const active = pathname === href || (href !== "/admin" && pathname.startsWith(href));
-    return `flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold transition-colors ${
+    return `flex min-h-11 items-center gap-3 rounded-lg px-3 text-[13px] font-semibold transition-colors ${
       active
-        ? "bg-admin-active-bg text-admin-active-text"
+        ? "bg-admin-active-bg text-admin-active-text font-bold"
         : "text-admin-text-muted hover:bg-admin-surface-hover hover:text-admin-text"
     }`;
   }
@@ -63,7 +63,7 @@ export function Sidebar() {
       <nav className="flex-1 space-y-1 p-3">
         {links.map(({ href, label, icon: Icon }) => (
           <Link key={href} href={href} className={linkClass(href)} onClick={() => setOpen(false)}>
-            <Icon size={18} />
+            <Icon size={20} />
             {label}
             {href === "/admin/orders" && unseenOrders > 0 && (
               <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-black text-white">
@@ -75,15 +75,15 @@ export function Sidebar() {
       </nav>
       <div className="border-t border-admin-border p-3">
         <button onClick={toggleLang} className="mb-1 flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-admin-text-muted hover:bg-admin-surface-hover hover:text-admin-text">
-          <Languages size={18} />
+          <Languages size={20} />
           {ta.language}
         </button>
         <a href="/" target="_blank" className="mb-1 flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-admin-text-muted hover:bg-admin-surface-hover hover:text-admin-text">
-          <Flame size={18} />
+          <Flame size={20} />
           {ta.viewSite}
         </a>
         <button onClick={() => signOut()} className="flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-admin-text-muted hover:bg-admin-surface-hover hover:text-admin-text">
-          <LogOut size={18} />
+          <LogOut size={20} />
           {ta.signOut}
         </button>
       </div>
