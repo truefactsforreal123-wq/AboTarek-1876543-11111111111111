@@ -275,6 +275,12 @@ export async function toggleTableActive(id: string) {
   return updated;
 }
 
+export async function deleteTable(id: string) {
+  await requireAuth();
+  await prisma.restaurantTable.delete({ where: { id } });
+  revalidatePath("/admin/tables");
+}
+
 export async function regenerateTableToken(id: string) {
   await requireAuth();
   const table = await prisma.restaurantTable.update({

@@ -14,6 +14,7 @@ import {
   Star,
   Flame,
 } from "lucide-react";
+import { deleteMenuItem, toggleMenuItemAvailability } from "@/lib/actions";
 
 interface MenuItem {
   id: number;
@@ -52,6 +53,7 @@ export function MenuContent({ categories }: Props) {
   const [cat, setCat] = useState<number | "all">("all");
   const [editing, setEditing] = useState<AdminMenuItem | null>(null);
   const [adding, setAdding] = useState(false);
+  const [actingId, setActingId] = useState<number | null>(null);
 
   const cats = categories.map((c) => ({ id: c.id, name: c.nameAr }));
 
@@ -59,22 +61,40 @@ export function MenuContent({ categories }: Props) {
     return items.filter((it) => {
       const matchesCat = cat === "all" || it.categoryId === cat;
       const matchesQuery =
-        !query || it.nameAr.includes(query) || it.descAr.includes(query);
+        !query || it.nameAr.includes(query) || it.descAr.includes(query) || it.nameEn.toLowerCase().includes(query.toLowerCase()) || it.descEn.toLowerCase().includes(query.toLowerCase());
       return matchesCat && matchesQuery;
     });
   }, [items, query, cat]);
 
-  const toggleAvail = (id: number) => {
-    setItems((prev) =>
-      prev.map((it) =>
-        it.id === id ? { ...it, available: !it.available } : it
-      )
-    );
+  const toggleAvail = async (id: number) => {
+    setActingId(id);
+    try {
+      await toggleMenuItemAvailability(id);
+      setItems((prev) =>
+        prev.map((it) =>
+          it.id === id ? { ...it, available: !it.available } : it
+        )
+      );
+    } catch (err) {
+      console.error("Failed to toggle availability:", err);
+      alert("Failed to toggle availability. Please try again.");
+    } finally {
+      setActingId(null);
+    }
   };
 
-  const removeItem = (id: number) => {
+  const removeItem = async (id: number) => {
     if (!confirm("متأكد إنك عايز تمسح العنصر ده؟")) return;
-    setItems((prev) => prev.filter((it) => it.id !== id));
+    setActingId(id);
+    try {
+      await deleteMenuItem(id);
+      setItems((prev) => prev.filter((it) => it.id !== id));
+    } catch (err) {
+      console.error("Failed to delete item:", err);
+      alert("Failed to delete item. Please try again.");
+    } finally {
+      setActingId(null);
+    }
   };
 
   const saveItem = (updated: AdminMenuItem) => {
@@ -197,11 +217,18 @@ export function MenuContent({ categories }: Props) {
                 <div className="col-span-1 sm:col-span-1">
                   <button
                     onClick={() => toggleAvail(it.id)}
-                    className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.65rem] font-bold transition-colors ${
+                    disabled={actingId === it.id}
+                    className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.65rem] font-bold transition-colors disabled:opacity-40 ${
                       avail ? "bg-cobalt-50 text-cobalt-700" : "bg-ink-900/10 text-ink-700/50"
                     }`}
                   >
-                    {avail ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
+                    {actingId === it.id ? (
+                      <span className="h-3 w-3 animate-spin rounded-full border border-cobalt-700/30 border-t-cobalt-700" />
+                    ) : avail ? (
+                      <Eye className="h-3 w-3" />
+                    ) : (
+                      <EyeOff className="h-3 w-3" />
+                    )}
                     {avail ? "متاح" : "مخفي"}
                   </button>
                 </div>
@@ -216,10 +243,15 @@ export function MenuContent({ categories }: Props) {
                   </button>
                   <button
                     onClick={() => removeItem(it.id)}
-                    className="rounded-md p-2 text-tomato-600 transition-colors hover:bg-tomato-50"
+                    disabled={actingId === it.id}
+                    className="rounded-md p-2 text-tomato-600 transition-colors hover:bg-tomato-50 disabled:opacity-40"
                     aria-label="حذف"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    {actingId === it.id ? (
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-tomato-600/30 border-t-tomato-600 block" />
+                    ) : (
+                      <Trash2 className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
               </motion.div>

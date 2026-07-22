@@ -15,8 +15,10 @@ import {
 } from "lucide-react";
 import QRCode from "qrcode";
 import Image from "next/image";
-import { createTable } from "@/lib/actions";
+import { createTable, toggleTableActive, deleteTable, regenerateTableToken } from "@/lib/actions";
 import { useRouter } from "next/navigation";
+import { DownloadTableQRPDF } from "@/components/download-table-qr-pdf";
+import { DownloadAllQRPDF } from "@/components/download-all-qr-pdf";
 
 interface Table {
   id: string;
@@ -45,6 +47,8 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
   const [addOpen, setAddOpen] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
+  const [actingId, setActingId] = useState<string | null>(null);
+  const [qrMap, setQrMap] = useState<Record<string, string>>({});
 
   const filtered =
     branchFilter === "all" ? tables : tables.filter((t) => t.branchId === branchFilter);
@@ -52,20 +56,47 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
   const branchName = (id: number) =>
     branches.find((b) => b.id === id)?.nameAr ?? "—";
 
-  const regenerate = () => {
+  const regenerate = async (id: string) => {
     if (!confirm("إعادة توليد الرمز ستبطل الرمز القديم. متأكد؟")) return;
-    // TODO: Call server action to regenerate token
+    setActingId(id);
+    try {
+      const updated = await regenerateTableToken(id);
+      setTables((prev) => prev.map((t) => (t.id === id ? { ...t, qrToken: updated.qrToken } : t)));
+    } catch (err) {
+      console.error("Failed to regenerate token:", err);
+      alert("فشل في إعادة التوليد. حاول مرة أخرى.");
+    } finally {
+      setActingId(null);
+    }
   };
 
-  const toggleActive = (id: string) => {
-    setTables((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, isActive: !t.isActive } : t))
-    );
+  const toggleActive = async (id: string) => {
+    setActingId(id);
+    try {
+      await toggleTableActive(id);
+      setTables((prev) =>
+        prev.map((t) => (t.id === id ? { ...t, isActive: !t.isActive } : t))
+      );
+    } catch (err) {
+      console.error("Failed to toggle table:", err);
+      alert("فشل في تغيير الحالة. حاول مرة أخرى.");
+    } finally {
+      setActingId(null);
+    }
   };
 
-  const removeTable = (id: string) => {
+  const removeTable = async (id: string) => {
     if (!confirm("حذف الطاولة؟ سيتم إخفاؤها مع الحفاظ على الطلبات السابقة.")) return;
-    setTables((prev) => prev.filter((t) => t.id !== id));
+    setActingId(id);
+    try {
+      await deleteTable(id);
+      setTables((prev) => prev.filter((t) => t.id !== id));
+    } catch (err) {
+      console.error("Failed to delete table:", err);
+      alert("فشل في الحذف. حاول مرة أخرى.");
+    } finally {
+      setActingId(null);
+    }
   };
 
   const copyToken = (token: string) => {
@@ -87,6 +118,27 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
     }
   }, [qrModal]);
 
+  useEffect(() => {
+    const generateQRCodes = async () => {
+      const newMap: Record<string, string> = {};
+      await Promise.all(
+        filtered.map(async (t) => {
+          if (!qrMap[t.id]) {
+            newMap[t.id] = await QRCode.toDataURL(qrUrl(t), {
+              width: 80,
+              margin: 1,
+              color: { dark: "#0F1B2D", light: "#FBF5EC" },
+            });
+          }
+        })
+      );
+      if (Object.keys(newMap).length > 0) {
+        setQrMap((prev) => ({ ...prev, ...newMap }));
+      }
+    };
+    generateQRCodes();
+  }, [filtered, qrMap]);
+
   return (
     <div className="space-y-6" dir="rtl">
       {/* header */}
@@ -101,6 +153,14 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
           </p>
         </div>
         <div className="flex gap-2">
+          <DownloadAllQRPDF
+            tables={filtered.map((t) => ({
+              tableNumber: t.tableNumber,
+              qrToken: t.qrToken,
+              branchNameEn: t.branch.nameEn,
+            }))}
+            branchName={filtered.length > 0 ? filtered[0].branch.nameEn : "all"}
+          />
           <button
             onClick={() => window.print()}
             className="btn-ghost text-sm"
@@ -182,7 +242,11 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
             {/* mini QR */}
             <div className="mt-4 flex items-center gap-4">
               <div className="rounded-md border border-ink-900/10 bg-paper-warm/40 p-2">
-                <div className="h-16 w-16 animate-pulse bg-paper-warm" />
+                {qrMap[t.id] ? (
+                  <Image src={qrMap[t.id]} alt={`QR - Table ${t.tableNumber}`} width={64} height={64} unoptimized className="h-16 w-16" />
+                ) : (
+                  <div className="h-16 w-16 animate-pulse bg-paper-warm" />
+                )}
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-xs font-bold text-ink-700/50">رمز QR</div>
@@ -202,7 +266,13 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
             </div>
 
             {/* actions */}
-            <div className="mt-4 flex gap-1 border-t border-ink-900/8 pt-3">
+            <div className="mt-4 flex flex-wrap gap-1 border-t border-ink-900/8 pt-3">
+              <DownloadTableQRPDF
+                tableNumber={t.tableNumber}
+                qrToken={t.qrToken}
+                branchNameEn={t.branch.nameEn}
+                branchNameAr={t.branch.nameAr}
+              />
               <button
                 onClick={() => setQrModal(t)}
                 className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-2 text-xs font-bold text-cobalt-700 transition-colors hover:bg-cobalt-50"
@@ -211,22 +281,25 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
                 QR
               </button>
               <button
-                 onClick={regenerate}
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-2 text-xs font-bold text-saffron-700 transition-colors hover:bg-saffron-50"
+                 onClick={() => regenerate(t.id)}
+                 disabled={actingId === t.id}
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-2 text-xs font-bold text-saffron-700 transition-colors hover:bg-saffron-50 disabled:opacity-40"
               >
-                <RefreshCw className="h-3.5 w-3.5" />
+                <RefreshCw className={`h-3.5 w-3.5 ${actingId === t.id ? "animate-spin" : ""}`} />
                 رمز جديد
               </button>
               <button
                 onClick={() => toggleActive(t.id)}
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-2 text-xs font-bold text-ink-700/60 transition-colors hover:bg-ink-900/5"
+                disabled={actingId === t.id}
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-2 text-xs font-bold text-ink-700/60 transition-colors hover:bg-ink-900/5 disabled:opacity-40"
               >
                 {t.isActive ? <X className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
                 {t.isActive ? "إيقاف" : "تفعيل"}
               </button>
               <button
                 onClick={() => removeTable(t.id)}
-                className="flex items-center justify-center rounded-md px-3 py-2 text-tomato-600 transition-colors hover:bg-tomato-50"
+                disabled={actingId === t.id}
+                className="flex items-center justify-center rounded-md px-3 py-2 text-tomato-600 transition-colors hover:bg-tomato-50 disabled:opacity-40"
                 aria-label="حذف"
               >
                 <Trash2 className="h-3.5 w-3.5" />

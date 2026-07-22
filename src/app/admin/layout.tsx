@@ -4,6 +4,9 @@ import { redirect } from "next/navigation";
 import { UnseenOrdersProvider } from "./UnseenOrdersProvider";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  let soundEnabled = false;
+  let tables: { id: string; branch: { nameEn: string } }[] = [];
+
   try {
     const supabase = await createClient();
     const {
@@ -13,7 +16,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
     if (error || !user) redirect("/login");
 
-    const [soundSetting, tables] = await Promise.all([
+    const [soundSetting, fetchedTables] = await Promise.all([
       prisma.systemSetting
         .findUnique({ where: { key: "staff_sound_alerts" }, select: { value: true } })
         .catch(() => null),
@@ -21,21 +24,22 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         .findMany({ select: { id: true, branch: { select: { nameEn: true } } } })
         .catch(() => []),
     ]);
-    const soundEnabled =
+    soundEnabled =
       soundSetting?.value === true || soundSetting?.value === "true";
-
-    return (
-      <UnseenOrdersProvider
-        initialSoundEnabled={soundEnabled}
-        tableBranches={tables.map((table) => ({
-          tableId: table.id,
-          branchName: table.branch.nameEn,
-        }))}
-      >
-        {children}
-      </UnseenOrdersProvider>
-    );
+    tables = fetchedTables;
   } catch {
     redirect("/login");
   }
+
+  return (
+    <UnseenOrdersProvider
+      initialSoundEnabled={soundEnabled}
+      tableBranches={tables.map((table) => ({
+        tableId: table.id,
+        branchName: table.branch.nameEn,
+      }))}
+    >
+      {children}
+    </UnseenOrdersProvider>
+  );
 }

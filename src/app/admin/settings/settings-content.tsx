@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Save, Clock, Eye, Volume2, Check } from "lucide-react";
+import { updateSystemSetting } from "@/lib/actions";
 
 function Toggle({
   on,
@@ -43,12 +44,25 @@ export function SettingsContent({ initialSettings }: Props) {
     initialSettings.staff_sound_alerts !== false && initialSettings.staff_sound_alerts !== "false"
   );
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Save to database via server action
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2200);
+    setSaving(true);
+    try {
+      await Promise.all([
+        updateSystemSetting("order_ttl_hours", ttl),
+        updateSystemSetting("customer_live_tracking", liveTracking),
+        updateSystemSetting("staff_sound_alerts", soundAlerts),
+      ]);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2200);
+    } catch (err) {
+      console.error("Failed to save settings:", err);
+      alert("Failed to save settings. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -143,9 +157,13 @@ export function SettingsContent({ initialSettings }: Props) {
               تم الحفظ
             </motion.div>
           )}
-          <button type="submit" className="btn-primary text-sm">
-            <Save className="h-4 w-4" />
-            حفظ التغييرات
+          <button type="submit" disabled={saving} className="btn-primary text-sm disabled:opacity-50">
+            {saving ? (
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-paper/30 border-t-paper" />
+            ) : (
+              <Save className="h-4 w-4" />
+            )}
+            {saving ? "جارٍ الحفظ..." : "حفظ التغييرات"}
           </button>
         </div>
       </form>

@@ -125,10 +125,9 @@ export function OrdersDashboard({
   useEffect(() => {
     const interval = setInterval(() => {
       setTick((t) => t + 1);
-      router.refresh();
-    }, 10000);
+    }, 30000);
     return () => clearInterval(interval);
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     const supabase = createClient();
