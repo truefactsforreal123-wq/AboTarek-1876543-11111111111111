@@ -72,15 +72,15 @@ export function Sidebar() {
         ))}
       </nav>
       <div className="border-t border-white/8 p-3">
-        <button onClick={toggleLang} className="mb-1 flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-cream/45 hover:bg-white/5 hover:text-cream">
+        <button onClick={toggleLang} className="mb-1 flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-cream/65 hover:bg-white/5 hover:text-cream">
           <Languages size={18} />
           {ta.language}
         </button>
-        <a href="/" target="_blank" className="mb-1 flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-cream/45 hover:bg-white/5 hover:text-cream">
+        <a href="/" target="_blank" className="mb-1 flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-cream/65 hover:bg-white/5 hover:text-cream">
           <Flame size={18} />
           {ta.viewSite}
         </a>
-        <button onClick={() => signOut()} className="flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-cream/45 hover:bg-white/5 hover:text-cream">
+        <button onClick={() => signOut()} className="flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-cream/65 hover:bg-white/5 hover:text-cream">
           <LogOut size={18} />
           {ta.signOut}
         </button>

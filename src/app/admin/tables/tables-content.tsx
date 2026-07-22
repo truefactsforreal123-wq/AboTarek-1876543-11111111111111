@@ -48,7 +48,6 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
   const [copied, setCopied] = useState<string | null>(null);
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const [actingId, setActingId] = useState<string | null>(null);
-  const [qrMap, setQrMap] = useState<Record<string, string>>({});
 
   const filtered =
     branchFilter === "all" ? tables : tables.filter((t) => t.branchId === branchFilter);
@@ -118,27 +117,6 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
     }
   }, [qrModal]);
 
-  useEffect(() => {
-    const generateQRCodes = async () => {
-      const newMap: Record<string, string> = {};
-      await Promise.all(
-        filtered.map(async (t) => {
-          if (!qrMap[t.id]) {
-            newMap[t.id] = await QRCode.toDataURL(qrUrl(t), {
-              width: 80,
-              margin: 1,
-              color: { dark: "#0F1B2D", light: "#FBF5EC" },
-            });
-          }
-        })
-      );
-      if (Object.keys(newMap).length > 0) {
-        setQrMap((prev) => ({ ...prev, ...newMap }));
-      }
-    };
-    generateQRCodes();
-  }, [filtered, qrMap]);
-
   return (
     <div className="space-y-6" dir="rtl">
       {/* header */}
@@ -148,7 +126,7 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
             الطاولات
           </div>
           <h1 className="mt-2 text-3xl font-extrabold text-ink-900">الطاولات و QR</h1>
-          <p className="mt-1 text-sm text-ink-700/60">
+          <p className="mt-1 text-sm text-ink-700">
             كل طاولة ليها QR خاص برمز سري. امسح أو طبع QR للطاولات.
           </p>
         </div>
@@ -206,7 +184,7 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
       </div>
 
       {/* tables grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {filtered.map((t, i) => (
           <motion.div
             key={t.id}
@@ -221,7 +199,7 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
             {/* head */}
             <div className="flex items-start justify-between">
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-ink-700/40">
+                <div className="text-xs font-bold uppercase tracking-wider text-ink-700/60">
                   {branchName(t.branchId)}
                 </div>
                 <div className="mt-1 flex items-baseline gap-2">
@@ -232,37 +210,28 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
               </div>
               <span
                 className={`rounded-full px-2 py-0.5 text-[0.6rem] font-bold ${
-                  t.isActive ? "bg-cobalt-50 text-cobalt-700" : "bg-ink-900/10 text-ink-700/50"
+                  t.isActive ? "bg-cobalt-50 text-cobalt-700" : "bg-ink-900/10 text-ink-700/70"
                 }`}
               >
                 {t.isActive ? "نشطة" : "متوقفة"}
               </span>
             </div>
 
-            {/* mini QR */}
-            <div className="mt-4 flex items-center gap-4">
-              <div className="rounded-md border border-ink-900/10 bg-paper-warm/40 p-2">
-                {qrMap[t.id] ? (
-                  <Image src={qrMap[t.id]} alt={`QR - Table ${t.tableNumber}`} width={64} height={64} unoptimized className="h-16 w-16" />
+            {/* qr token */}
+            <div className="mt-4">
+              <div className="text-xs font-bold text-ink-700/70">رمز QR</div>
+              <button
+                onClick={() => copyToken(t.qrToken)}
+                className="mt-1 flex items-center gap-1.5 font-mono text-[0.7rem] text-ink-700/70 transition-colors hover:text-tomato-600"
+                dir="ltr"
+              >
+                {t.qrToken.slice(0, 8)}...
+                {copied === t.qrToken ? (
+                  <Check className="h-3 w-3 text-cobalt-600" />
                 ) : (
-                  <div className="h-16 w-16 animate-pulse bg-paper-warm" />
+                  <Copy className="h-3 w-3" />
                 )}
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-xs font-bold text-ink-700/50">رمز QR</div>
-                <button
-                  onClick={() => copyToken(t.qrToken)}
-                  className="mt-1 flex items-center gap-1.5 font-mono text-[0.7rem] text-ink-700/70 transition-colors hover:text-tomato-600"
-                  dir="ltr"
-                >
-                  {t.qrToken.slice(0, 8)}...
-                  {copied === t.qrToken ? (
-                    <Check className="h-3 w-3 text-cobalt-600" />
-                  ) : (
-                    <Copy className="h-3 w-3" />
-                  )}
-                </button>
-              </div>
+              </button>
             </div>
 
             {/* actions */}
@@ -291,7 +260,7 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
               <button
                 onClick={() => toggleActive(t.id)}
                 disabled={actingId === t.id}
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-2 text-xs font-bold text-ink-700/60 transition-colors hover:bg-ink-900/5 disabled:opacity-40"
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-md py-2 text-xs font-bold text-ink-700 transition-colors hover:bg-ink-900/5 disabled:opacity-40"
               >
                 {t.isActive ? <X className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
                 {t.isActive ? "إيقاف" : "تفعيل"}
@@ -340,7 +309,7 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
                   <div className="h-[200px] w-[200px] animate-pulse bg-paper-warm" />
                 )}
               </div>
-              <p className="mt-5 text-xs text-ink-700/50" dir="ltr">
+              <p className="mt-5 text-xs text-ink-700/70" dir="ltr">
                 {qrUrl(qrModal)}
               </p>
               <div className="mt-6 flex gap-3">
@@ -429,13 +398,13 @@ function AddTableModal({
       >
         <div className="flex items-center justify-between border-b border-ink-900/10 px-6 py-4">
           <h2 className="text-lg font-extrabold text-ink-900">طاولة جديدة</h2>
-          <button onClick={onClose} className="rounded-md p-1.5 text-ink-700/40 hover:bg-ink-900/5">
+          <button onClick={onClose} className="rounded-md p-1.5 text-ink-700/60 hover:bg-ink-900/5">
             <X className="h-5 w-5" />
           </button>
         </div>
         <form onSubmit={submit} className="space-y-4 px-6 py-5">
           <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-700/60">
+            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-700">
               الفرع
             </label>
             <select
@@ -456,7 +425,7 @@ function AddTableModal({
             </select>
           </div>
           <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-700/60">
+            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-700">
               رقم الطاولة
             </label>
             <input
@@ -468,7 +437,7 @@ function AddTableModal({
               className="w-full rounded-md border border-ink-900/15 bg-paper py-2.5 px-3 text-sm outline-none focus:border-cobalt-500"
               dir="ltr"
             />
-            <p className="mt-1.5 flex items-center gap-1.5 text-xs text-ink-700/40">
+            <p className="mt-1.5 flex items-center gap-1.5 text-xs text-ink-700/60">
               <Store className="h-3 w-3" />
               سيُولّد رمز QR تلقائياً عند الحفظ.
             </p>

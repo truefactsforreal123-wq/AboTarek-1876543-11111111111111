@@ -121,7 +121,7 @@ export function MenuContent({ categories }: Props) {
       {/* filters */}
       <div className="flex flex-wrap items-center gap-3 rounded-lg border border-ink-900/10 bg-paper p-3">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-700/30" />
+          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-700/50" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -154,7 +154,7 @@ export function MenuContent({ categories }: Props) {
 
       {/* list */}
       <div className="overflow-hidden rounded-lg border border-ink-900/10 bg-paper">
-        <div className="hidden grid-cols-12 gap-4 border-b border-ink-900/10 bg-paper-warm/30 px-5 py-3 text-xs font-bold uppercase tracking-wider text-ink-700/50 sm:grid">
+        <div className="hidden grid-cols-12 gap-4 border-b border-ink-900/10 bg-paper-warm/30 px-5 py-3 text-xs font-bold uppercase tracking-wider text-ink-700/70 sm:grid">
           <div className="col-span-5">العنصر</div>
           <div className="col-span-2">التصنيف</div>
           <div className="col-span-2">السعر</div>
@@ -183,7 +183,7 @@ export function MenuContent({ categories }: Props) {
                       className="h-12 w-12 shrink-0 rounded-md object-cover"
                     />
                   ) : (
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-paper-warm text-xs font-bold text-ink-700/30">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-paper-warm text-xs font-bold text-ink-700/50">
                       —
                     </div>
                   )}
@@ -202,11 +202,11 @@ export function MenuContent({ categories }: Props) {
                         </span>
                       )}
                     </div>
-                    <p className="mt-0.5 truncate text-xs text-ink-700/50">{it.descAr}</p>
+                    <p className="mt-0.5 truncate text-xs text-ink-700/70">{it.descAr}</p>
                   </div>
                 </div>
                 {/* category */}
-                <div className="col-span-1 text-xs text-ink-700/60 sm:col-span-2">
+                <div className="col-span-1 text-xs text-ink-700 sm:col-span-2">
                   {it.categoryName}
                 </div>
                 {/* price */}
@@ -219,7 +219,7 @@ export function MenuContent({ categories }: Props) {
                     onClick={() => toggleAvail(it.id)}
                     disabled={actingId === it.id}
                     className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.65rem] font-bold transition-colors disabled:opacity-40 ${
-                      avail ? "bg-cobalt-50 text-cobalt-700" : "bg-ink-900/10 text-ink-700/50"
+                      avail ? "bg-cobalt-50 text-cobalt-700" : "bg-ink-900/10 text-ink-700/70"
                     }`}
                   >
                     {actingId === it.id ? (
@@ -258,7 +258,7 @@ export function MenuContent({ categories }: Props) {
             );
           })}
           {filtered.length === 0 && (
-            <div className="py-16 text-center text-sm text-ink-700/40">
+            <div className="py-16 text-center text-sm text-ink-700/60">
               لا توجد عناصر مطابقة.
             </div>
           )}
@@ -338,13 +338,13 @@ function EditModal({
           <h2 className="text-lg font-extrabold text-ink-900">
             {item ? "تعديل عنصر" : "إضافة عنصر جديد"}
           </h2>
-          <button onClick={onClose} className="rounded-md p-1.5 text-ink-700/40 hover:bg-ink-900/5">
+          <button onClick={onClose} className="rounded-md p-1.5 text-ink-700/60 hover:bg-ink-900/5">
             <X className="h-5 w-5" />
           </button>
         </div>
         <form onSubmit={submit} className="space-y-4 px-6 py-5">
           <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-700/60">
+            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-700">
               الاسم
             </label>
             <input
@@ -355,7 +355,7 @@ function EditModal({
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-700/60">
+            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-700">
               الوصف
             </label>
             <textarea
@@ -367,7 +367,7 @@ function EditModal({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-700/60">
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-700">
                 السعر (ج)
               </label>
               <input
@@ -379,7 +379,7 @@ function EditModal({
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-700/60">
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-700">
                 شارة
               </label>
               <select

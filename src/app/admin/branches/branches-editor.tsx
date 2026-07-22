@@ -66,20 +66,20 @@ export function BranchesEditor({ branches: initial }: { branches: Branch[] }) {
           <h3 className="text-sm font-black text-cream">{t.createBranch}</h3>
           <form className="mt-4 grid gap-3" onSubmit={handleCreate}>
             <div className="grid grid-cols-2 gap-2">
-              <input name="number" required placeholder={t.branchNumber} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm font-bold text-cream placeholder:text-cream/30" />
-              <input name="mapsUrl" placeholder="Google Maps URL" className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/30" />
+              <input name="number" required placeholder={t.branchNumber} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm font-bold text-cream placeholder:text-cream/45" />
+              <input name="mapsUrl" placeholder="Google Maps URL" className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/45" />
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <input name="nameAr" required placeholder={t.nameAr} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/30" />
-              <input name="nameEn" required placeholder={t.nameEn} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/30" />
+              <input name="nameAr" required placeholder={t.nameAr} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/45" />
+              <input name="nameEn" required placeholder={t.nameEn} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/45" />
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <input name="addressAr" required placeholder={t.addressAr} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/30" />
-              <input name="addressEn" required placeholder={t.addressEn} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/30" />
+              <input name="addressAr" required placeholder={t.addressAr} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/45" />
+              <input name="addressEn" required placeholder={t.addressEn} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/45" />
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <input name="phone" required placeholder={t.phone} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/30" />
-              <input name="whatsapp" required placeholder={t.whatsapp} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/30" />
+              <input name="phone" required placeholder={t.phone} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/45" />
+              <input name="whatsapp" required placeholder={t.whatsapp} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream placeholder:text-cream/45" />
             </div>
             <button type="submit" disabled={creating} className="brand-button mt-2 w-fit text-sm disabled:opacity-40">
               <Check size={14} /> {creating ? t.creating : t.createBranch}
@@ -123,7 +123,7 @@ export function BranchesEditor({ branches: initial }: { branches: Branch[] }) {
                 <input name="mapsUrl" defaultValue={b.mapsUrl} className="min-h-9 rounded-lg border border-white/10 bg-black/20 px-3 text-sm text-cream" />
                 <div className="flex gap-2">
                   <button type="submit" className="inline-flex min-h-9 items-center gap-2 rounded-lg bg-olive-400/16 px-4 text-sm font-bold text-olive-400"><Check size={14} /> {t.save}</button>
-                  <button type="button" onClick={() => setEditing(null)} className="inline-flex min-h-9 items-center gap-2 rounded-lg px-4 text-sm font-bold text-cream/35 hover:text-cream">{t.cancel}</button>
+                  <button type="button" onClick={() => setEditing(null)} className="inline-flex min-h-9 items-center gap-2 rounded-lg px-4 text-sm font-bold text-cream/60 hover:text-cream">{t.cancel}</button>
                 </div>
               </form>
             ) : (
@@ -132,17 +132,17 @@ export function BranchesEditor({ branches: initial }: { branches: Branch[] }) {
                   <div>
                     <span className="text-3xl font-black text-brand-500/40">{b.number}</span>
                     <h2 className="mt-2 text-lg font-black text-cream">{b.nameAr}</h2>
-                    <p className="text-xs text-cream/45">{b.nameEn}</p>
+                    <p className="text-xs text-cream/65">{b.nameEn}</p>
                   </div>
                   <div className="flex gap-1">
-                    <button onClick={() => setEditing(b.id)} className="grid h-8 w-8 place-items-center rounded-lg text-cream/35 hover:text-cream"><Edit3 size={16} /></button>
-                    <button onClick={() => handleDelete(b.id)} className="grid h-8 w-8 place-items-center rounded-lg text-cream/35 hover:text-red-400"><Trash2 size={16} /></button>
+                    <button onClick={() => setEditing(b.id)} className="grid h-8 w-8 place-items-center rounded-lg text-cream/60 hover:text-cream"><Edit3 size={16} /></button>
+                    <button onClick={() => handleDelete(b.id)} className="grid h-8 w-8 place-items-center rounded-lg text-cream/60 hover:text-red-400"><Trash2 size={16} /></button>
                   </div>
                 </div>
                 <div className="mt-4 space-y-2">
                   <p className="flex items-start gap-2 text-sm text-cream/55"><MapPin size={15} className="mt-0.5 shrink-0 text-gold-300" /> {b.addressAr}</p>
                   <p className="flex items-center gap-2 text-sm font-bold text-cream/55"><Phone size={15} className="shrink-0 text-gold-300" /> <span dir="ltr">{b.phone}</span></p>
-                  <a href={`https://wa.me/${b.whatsapp}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs font-bold text-cream/40 hover:text-gold-300"><ExternalLink size={13} /> WhatsApp</a>
+                  <a href={`https://wa.me/${b.whatsapp}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-xs font-bold text-cream/65 hover:text-gold-300"><ExternalLink size={13} /> WhatsApp</a>
                 </div>
               </>
             )}

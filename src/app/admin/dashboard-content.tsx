@@ -37,7 +37,7 @@ interface Props {
 }
 
 const statusMap: Record<string, { label: string; cls: string }> = {
-  draft: { label: "مسودة", cls: "bg-ink-900/10 text-ink-700/50" },
+  draft: { label: "مسودة", cls: "bg-ink-900/10 text-ink-700/70" },
   submitted: { label: "جديد", cls: "bg-tomato-100 text-tomato-700" },
   preparing: { label: "تحضير", cls: "bg-saffron-100 text-saffron-700" },
   ready: { label: "جاهز", cls: "bg-cobalt-100 text-cobalt-700" },
@@ -77,9 +77,9 @@ export function DashboardContent({ userEmail, stats, recentOrders }: Props) {
             لوحة التحكم
           </div>
           <h1 className="mt-2 text-3xl font-extrabold text-ink-900">مرحباً 👋</h1>
-          {userEmail && <p className="mt-1 text-sm text-ink-700/50" dir="ltr">{userEmail}</p>}
+          {userEmail && <p className="mt-1 text-sm text-ink-700" dir="ltr">{userEmail}</p>}
         </div>
-        <div className="text-sm text-ink-700/60">
+        <div className="text-sm text-ink-700">
           {new Date().toLocaleDateString("ar-EG", { weekday: "long", day: "numeric", month: "long" })}
         </div>
       </div>
@@ -109,12 +109,12 @@ export function DashboardContent({ userEmail, stats, recentOrders }: Props) {
                 >
                   <s.icon className="h-5 w-5" />
                 </div>
-                <ArrowUpLeft className="h-4 w-4 text-ink-700/20 transition-colors group-hover:text-ink-700/50" />
+                <ArrowUpLeft className="h-4 w-4 text-ink-700/60 transition-colors group-hover:text-ink-700" />
               </div>
               <div className="mt-4 text-3xl font-extrabold tabular-nums text-ink-900">
                 {s.value.toLocaleString("ar-EG")}
               </div>
-              <div className="mt-1 text-sm font-semibold text-ink-700/60">{s.label}</div>
+              <div className="mt-1 text-sm font-semibold text-ink-700">{s.label}</div>
             </Link>
           </motion.div>
         ))}
@@ -136,7 +136,7 @@ export function DashboardContent({ userEmail, stats, recentOrders }: Props) {
             </div>
             <div className="divide-y divide-ink-900/8">
               {recentOrders.length === 0 ? (
-                <div className="py-16 text-center text-sm text-ink-700/40">
+                <div className="py-16 text-center text-sm text-ink-700/60">
                   لا توجد طلبات بعد.
                 </div>
               ) : (
@@ -157,7 +157,7 @@ export function DashboardContent({ userEmail, stats, recentOrders }: Props) {
                         <div className="text-sm font-bold text-ink-900">
                           طاولة {o.table.tableNumber} · {o.items.length} أصناف
                         </div>
-                        <div className="mt-0.5 flex items-center gap-1.5 text-xs text-ink-700/50">
+                        <div className="mt-0.5 flex items-center gap-1.5 text-xs text-ink-700/70">
                           <Clock className="h-3 w-3" />
                           {formatDate(o.createdAt)}
                         </div>
@@ -193,7 +193,7 @@ export function DashboardContent({ userEmail, stats, recentOrders }: Props) {
                 >
                   <a.icon className="h-4 w-4 text-cobalt-500" />
                   {a.label}
-                  <ArrowUpLeft className="mr-auto h-3.5 w-3.5 text-ink-700/30" />
+                  <ArrowUpLeft className="mr-auto h-3.5 w-3.5 text-ink-700/50" />
                 </Link>
               ))}
             </div>

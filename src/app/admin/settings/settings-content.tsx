@@ -73,7 +73,7 @@ export function SettingsContent({ initialSettings }: Props) {
           الإعدادات
         </div>
         <h1 className="mt-2 text-3xl font-extrabold text-ink-900">إعدادات النظام</h1>
-        <p className="mt-1 text-sm text-ink-700/60">
+        <p className="mt-1 text-sm text-ink-700">
           تحكّم في سلوك الطلبات وتتبّعها.
         </p>
       </div>
@@ -87,7 +87,7 @@ export function SettingsContent({ initialSettings }: Props) {
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-extrabold text-ink-900">مدة حفظ الطلبات</h2>
-              <p className="mt-1 text-sm text-ink-700/60">
+              <p className="mt-1 text-sm text-ink-700">
                 الطلبات التي تم تقديمها تُحذف تلقائياً بعد هذه المدة.
               </p>
               <div className="mt-5 flex items-center gap-4">
@@ -101,10 +101,10 @@ export function SettingsContent({ initialSettings }: Props) {
                 />
                 <div className="flex items-baseline gap-1.5 rounded-md bg-paper-warm px-3 py-1.5">
                   <span className="text-2xl font-extrabold tabular-nums text-ink-900">{ttl}</span>
-                  <span className="text-xs font-bold text-ink-700/50">ساعة</span>
+                   <span className="text-xs font-bold text-ink-700/70">ساعة</span>
                 </div>
               </div>
-              <div className="mt-2 flex justify-between text-[0.65rem] text-ink-700/40">
+               <div className="mt-2 flex justify-between text-[0.65rem] text-ink-700/60">
                 <span>١ ساعة</span>
                 <span>٧٢ ساعة</span>
               </div>
@@ -120,7 +120,7 @@ export function SettingsContent({ initialSettings }: Props) {
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-extrabold text-ink-900">تتبّع الطلب المباشر</h2>
-              <p className="mt-1 text-sm text-ink-700/60">
+              <p className="mt-1 text-sm text-ink-700">
                 اسمح للعميل بمتابعة حالة طلبه (استُلم → تحضير → جاهز → اُكل).
               </p>
             </div>
@@ -136,7 +136,7 @@ export function SettingsContent({ initialSettings }: Props) {
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-extrabold text-ink-900">تنبيه صوتي للطلبات</h2>
-              <p className="mt-1 text-sm text-ink-700/60">
+              <p className="mt-1 text-sm text-ink-700">
                 صوت تنبيه عند وصول طلب جديد في لوحة الطاولات.
               </p>
             </div>
