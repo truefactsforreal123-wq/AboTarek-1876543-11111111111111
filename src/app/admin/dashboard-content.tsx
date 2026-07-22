@@ -4,10 +4,12 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   UtensilsCrossed,
+  QrCode,
   Store,
   TrendingUp,
   Clock,
   ArrowUpLeft,
+  ClipboardList,
 } from "lucide-react";
 
 interface Stats {
@@ -46,9 +48,10 @@ const statusMap: Record<string, { label: string; cls: string }> = {
 
 export function DashboardContent({ userEmail, stats, recentOrders }: Props) {
   const statCards = [
-    { label: "عناصر المنيو", value: stats.items, icon: UtensilsCrossed, to: "/admin/menu", tint: "tomato" },
-    { label: "الفروع", value: stats.branches, icon: Store, to: "/admin/branches", tint: "cobalt" },
-    { label: "التقييمات", value: stats.reviews, icon: TrendingUp, to: "/admin/reviews", tint: "saffron" },
+    { label: "عناصر المنيو", value: stats.items, icon: UtensilsCrossed, to: "/admin/menu", bg: "bg-red-50", iconColor: "text-red-500" },
+    { label: "الطاولات", value: stats.tables ?? stats.branches * 5, icon: QrCode, to: "/admin/tables", bg: "bg-blue-50", iconColor: "text-blue-500" },
+    { label: "الفروع", value: stats.branches, icon: Store, to: "/admin/branches", bg: "bg-amber-50", iconColor: "text-amber-600" },
+    { label: "التقييمات", value: stats.reviews, icon: TrendingUp, to: "/admin/reviews", bg: "bg-emerald-50", iconColor: "text-emerald-600" },
   ];
 
   const formatDate = (date: string) => {
@@ -67,14 +70,11 @@ export function DashboardContent({ userEmail, stats, recentOrders }: Props) {
     order.items.reduce((sum, i) => sum + Number(i.priceAtOrder) * i.quantity, 0);
 
   return (
-    <div className="space-y-8" dir="rtl">
+    <div className="space-y-6" dir="rtl">
       {/* header */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="text-xs font-bold uppercase tracking-[0.25em] text-brand-600">
-            لوحة التحكم
-          </div>
-          <h1 className="mt-2 text-3xl font-extrabold text-admin-text">مرحباً 👋</h1>
+          <h1 className="text-2xl font-extrabold text-admin-text">مرحباً 👋</h1>
           {userEmail && <p className="mt-1 text-sm text-admin-text-muted" dir="ltr">{userEmail}</p>}
         </div>
         <div className="text-sm text-admin-text-muted">
@@ -87,52 +87,51 @@ export function DashboardContent({ userEmail, stats, recentOrders }: Props) {
         {statCards.map((s, i) => (
           <motion.div
             key={s.label}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.07, duration: 0.4 }}
+            transition={{ delay: i * 0.06, duration: 0.35 }}
           >
             <Link
               href={s.to}
-              className="group block rounded-lg border border-admin-border bg-admin-surface p-5 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-admin-text/5"
+              className="group flex items-center gap-4 rounded-xl border border-admin-border bg-admin-surface p-4 transition-all hover:shadow-md hover:shadow-admin-text/5"
             >
-              <div className="flex items-start justify-between">
-                <div
-                  className={`flex h-11 w-11 items-center justify-center rounded-md ${
-                    s.tint === "tomato"
-                      ? "bg-red-50 text-red-600"
-                      : s.tint === "cobalt"
-                      ? "bg-blue-50 text-blue-600"
-                      : "bg-amber-50 text-amber-600"
-                  }`}
-                >
-                  <s.icon className="h-5 w-5" />
+              <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${s.bg}`}>
+                <s.icon className={`h-5 w-5 ${s.iconColor}`} />
+              </div>
+              <div className="min-w-0">
+                <div className="text-2xl font-extrabold tabular-nums text-admin-text">
+                  {s.value.toLocaleString("ar-EG")}
                 </div>
-                <ArrowUpLeft className="h-4 w-4 text-admin-text-muted/60 transition-colors group-hover:text-admin-text" />
+                <div className="text-xs font-semibold text-admin-text-muted">{s.label}</div>
               </div>
-              <div className="mt-4 text-3xl font-extrabold tabular-nums text-admin-text">
-                {s.value.toLocaleString("ar-EG")}
-              </div>
-              <div className="mt-1 text-sm font-semibold text-admin-text-muted">{s.label}</div>
+              <ArrowUpLeft className="mr-auto h-4 w-4 text-admin-text-muted/40 transition-colors group-hover:text-admin-text" />
             </Link>
           </motion.div>
         ))}
       </div>
 
       {/* recent orders */}
-      <div className="rounded-lg border border-admin-border bg-admin-surface">
-        <div className="flex items-center justify-between border-b border-admin-border px-6 py-4">
-          <h2 className="text-lg font-extrabold text-admin-text">أحدث الطلبات</h2>
+      <div className="rounded-xl border border-admin-border bg-admin-surface">
+        <div className="flex items-center justify-between border-b border-admin-border px-5 py-3.5">
+          <div className="flex items-center gap-2">
+            <ClipboardList className="h-4 w-4 text-admin-text-muted" />
+            <h2 className="text-sm font-extrabold text-admin-text">أحدث الطلبات</h2>
+          </div>
           <Link
             href="/admin/orders"
-            className="text-xs font-bold text-brand-600 underline underline-offset-4"
+            className="text-xs font-bold text-brand-600 hover:underline"
           >
             عرض الكل
           </Link>
         </div>
-        <div className="divide-y divide-admin-border/60">
+        <div className="divide-y divide-admin-border/50">
           {recentOrders.length === 0 ? (
-            <div className="py-16 text-center text-sm text-admin-text-muted/60">
-              لا توجد طلبات بعد.
+            <div className="flex flex-col items-center justify-center py-14 text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-admin-surface-hover">
+                <ClipboardList className="h-5 w-5 text-admin-text-muted/50" />
+              </div>
+              <p className="mt-3 text-sm font-semibold text-admin-text-muted">مفيش طلبات لسه</p>
+              <p className="mt-1 text-xs text-admin-text-muted/60">الطلبات الجديدة هتظهر هنا</p>
             </div>
           ) : (
             recentOrders.map((o, i) => {
@@ -140,27 +139,27 @@ export function DashboardContent({ userEmail, stats, recentOrders }: Props) {
               return (
                 <motion.div
                   key={o.id}
-                  initial={{ opacity: 0, x: 12 }}
+                  initial={{ opacity: 0, x: 8 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.06, duration: 0.35 }}
-                  className="flex items-center gap-4 px-6 py-4"
+                  transition={{ delay: i * 0.05, duration: 0.3 }}
+                  className="flex items-center gap-4 px-5 py-3.5"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-md bg-admin-text text-sm font-extrabold text-admin-surface tabular-nums">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-admin-text text-xs font-extrabold text-admin-surface tabular-nums">
                     {o.table.tableNumber}
                   </div>
-                  <div className="flex-1">
+                  <div className="min-w-0 flex-1">
                     <div className="text-sm font-bold text-admin-text">
                       طاولة {o.table.tableNumber} · {o.items.length} أصناف
                     </div>
-                    <div className="mt-0.5 flex items-center gap-1.5 text-xs text-admin-text-muted/70">
+                    <div className="mt-0.5 flex items-center gap-1 text-xs text-admin-text-muted">
                       <Clock className="h-3 w-3" />
                       {formatDate(o.createdAt)}
                     </div>
                   </div>
-                  <span className={`rounded-full px-2.5 py-1 text-[0.65rem] font-bold ${st.cls}`}>
+                  <span className={`shrink-0 rounded-full px-2 py-0.5 text-[0.65rem] font-bold ${st.cls}`}>
                     {st.label}
                   </span>
-                  <span className="w-16 text-left text-sm font-extrabold tabular-nums text-brand-600">
+                  <span className="shrink-0 w-14 text-left text-sm font-extrabold tabular-nums text-brand-600">
                     {getTotal(o).toLocaleString("ar-EG")} ج
                   </span>
                 </motion.div>

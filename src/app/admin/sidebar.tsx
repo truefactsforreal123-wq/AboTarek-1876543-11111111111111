@@ -45,7 +45,7 @@ export function Sidebar() {
     return `flex min-h-11 items-center gap-3 rounded-lg px-3 text-[13px] font-semibold transition-colors ${
       active
         ? "bg-admin-active-bg text-admin-active-text font-bold"
-        : "text-admin-text-muted hover:bg-admin-surface-hover hover:text-admin-text"
+        : "text-admin-text hover:bg-admin-surface-hover"
     }`;
   }
 
@@ -74,15 +74,15 @@ export function Sidebar() {
         ))}
       </nav>
       <div className="border-t border-admin-border p-3">
-        <button onClick={toggleLang} className="mb-1 flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-admin-text-muted hover:bg-admin-surface-hover hover:text-admin-text">
+        <button onClick={toggleLang} className="mb-1 flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-admin-text hover:bg-admin-surface-hover">
           <Languages size={20} />
           {ta.language}
         </button>
-        <a href="/" target="_blank" className="mb-1 flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-admin-text-muted hover:bg-admin-surface-hover hover:text-admin-text">
+        <a href="/" target="_blank" className="mb-1 flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-admin-text hover:bg-admin-surface-hover">
           <Flame size={20} />
           {ta.viewSite}
         </a>
-        <button onClick={() => signOut()} className="flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-admin-text-muted hover:bg-admin-surface-hover hover:text-admin-text">
+        <button onClick={() => signOut()} className="flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-admin-text hover:bg-admin-surface-hover">
           <LogOut size={20} />
           {ta.signOut}
         </button>
@@ -118,7 +118,7 @@ export function Sidebar() {
       >
         <button
           onClick={() => setOpen(false)}
-          className="absolute top-4 right-4 rounded-lg p-1 text-admin-text-muted hover:text-admin-text"
+          className="absolute top-4 right-4 rounded-lg p-1 text-admin-text hover:bg-admin-surface-hover"
           aria-label="Close menu"
         >
           <X size={20} />
