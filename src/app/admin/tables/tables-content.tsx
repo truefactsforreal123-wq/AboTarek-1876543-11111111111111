@@ -8,8 +8,6 @@ import {
   Printer,
   Trash2,
   QrCode,
-  Copy,
-  Check,
   X,
   Store,
 } from "lucide-react";
@@ -45,7 +43,6 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
   const [branchFilter, setBranchFilter] = useState<number | "all">("all");
   const [qrModal, setQrModal] = useState<Table | null>(null);
   const [addOpen, setAddOpen] = useState(false);
-  const [copied, setCopied] = useState<string | null>(null);
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const [actingId, setActingId] = useState<string | null>(null);
 
@@ -96,12 +93,6 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
     } finally {
       setActingId(null);
     }
-  };
-
-  const copyToken = (token: string) => {
-    navigator.clipboard?.writeText(token);
-    setCopied(token);
-    setTimeout(() => setCopied(null), 1500);
   };
 
   const qrUrl = (t: Table) =>
@@ -215,23 +206,6 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
               >
                 {t.isActive ? "نشطة" : "متوقفة"}
               </span>
-            </div>
-
-            {/* qr token */}
-            <div className="mt-4">
-              <div className="text-xs font-bold text-ink-700/70">رمز QR</div>
-              <button
-                onClick={() => copyToken(t.qrToken)}
-                className="mt-1 flex items-center gap-1.5 font-mono text-[0.7rem] text-ink-700/70 transition-colors hover:text-tomato-600"
-                dir="ltr"
-              >
-                {t.qrToken.slice(0, 8)}...
-                {copied === t.qrToken ? (
-                  <Check className="h-3 w-3 text-cobalt-600" />
-                ) : (
-                  <Copy className="h-3 w-3" />
-                )}
-              </button>
             </div>
 
             {/* actions */}
