@@ -184,7 +184,7 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
       </div>
 
       {/* tables grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((t, i) => (
           <motion.div
             key={t.id}
@@ -235,7 +235,7 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
             </div>
 
             {/* actions */}
-            <div className="mt-4 flex flex-wrap gap-1 border-t border-ink-900/8 pt-3">
+            <div className="mt-4 flex gap-1 border-t border-ink-900/8 pt-3">
               <DownloadTableQRPDF
                 tableNumber={t.tableNumber}
                 qrToken={t.qrToken}
