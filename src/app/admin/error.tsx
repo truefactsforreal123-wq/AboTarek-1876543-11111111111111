@@ -10,21 +10,21 @@ export default function AdminError({
 }) {
   const t = useAdminT();
   return (
-    <div className="flex min-h-screen items-center justify-center bg-ink-950 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-admin-bg p-4">
       <div className="max-w-md text-center">
-        <h2 className="text-xl font-black text-cream">{t.somethingWentWrong}</h2>
-        <p className="mt-2 text-sm text-cream/60">
+        <h2 className="text-xl font-black text-admin-text">{t.somethingWentWrong}</h2>
+        <p className="mt-2 text-sm text-admin-text-muted">
           {t.unexpectedError}
         </p>
         <button
           onClick={reset}
-          className="brand-button mt-6"
+          className="btn-primary mt-6"
         >
           {t.tryAgain}
         </button>
         <a
           href="/admin"
-          className="mt-3 inline-block text-sm font-bold text-cream/65 hover:text-cream"
+          className="mt-3 inline-block text-sm font-bold text-admin-text-muted hover:text-admin-text"
         >
           {t.backToDashboard}
         </a>

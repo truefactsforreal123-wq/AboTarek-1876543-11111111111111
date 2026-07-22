@@ -64,7 +64,6 @@ export function OrdersDashboard({
     reset: resetUnseenOrders,
   } = useUnseenOrders();
 
-  // Clear unseen badge when visiting orders page
   useEffect(() => {
     resetUnseenOrders();
   }, [resetUnseenOrders]);
@@ -78,15 +77,14 @@ export function OrdersDashboard({
   }
 
   const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-    submitted: { label: t.new, color: "bg-blue-500/15 text-blue-400 border-blue-500/20" },
-    preparing: { label: t.preparing, color: "bg-yellow-500/15 text-yellow-400 border-yellow-500/20" },
-    ready: { label: t.ready, color: "bg-green-500/15 text-green-400 border-green-500/20" },
-    served: { label: t.served, color: "bg-green-500/10 text-green-400/60" },
+    submitted: { label: t.new, color: "bg-blue-50 text-blue-700 border border-blue-200" },
+    preparing: { label: t.preparing, color: "bg-amber-50 text-amber-700 border border-amber-200" },
+    ready: { label: t.ready, color: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
+    served: { label: t.served, color: "bg-gray-100 text-gray-500" },
   };
 
   const [tab, setTab] = useState<"active" | "history" | "summary">("active");
   const [acting, setActing] = useState<string | null>(null);
-  // Summary date picker state
   const todayStr = new Date().toISOString().slice(0, 10);
   const [summaryDate, setSummaryDate] = useState(todayStr);
   const [summaryData, setSummaryData] = useState<DaySummary | null>(null);
@@ -114,11 +112,11 @@ export function OrdersDashboard({
   }, [lang]);
 
   const getTimeColor = useCallback((dateStr: string | null) => {
-    if (!dateStr) return "text-cream/65";
+    if (!dateStr) return "text-admin-text-muted";
     const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 60000);
-    if (diff < 5) return "text-green-400";
-    if (diff < 15) return "text-yellow-400";
-    return "text-red-400";
+    if (diff < 5) return "text-emerald-600";
+    if (diff < 15) return "text-amber-600";
+    return "text-red-500";
   }, []);
 
   const [, setTick] = useState(0);
@@ -155,7 +153,6 @@ export function OrdersDashboard({
     };
   }, [router]);
 
-  // Fetch summary when date changes or summary tab opens
   useEffect(() => {
     if (tab !== "summary") return;
     let cancelled = false;
@@ -225,8 +222,8 @@ export function OrdersDashboard({
             onClick={() => setTab("active")}
             className={`flex items-center gap-2 rounded-lg px-4 py-2.5 text-base font-bold transition-colors ${
               tab === "active"
-                ? "bg-brand-500/15 text-gold-300"
-                : "text-cream/60 hover:text-cream"
+                ? "bg-admin-active-bg text-admin-active-text"
+                : "text-admin-text-muted hover:text-admin-text"
             }`}
           >
             <Bell size={18} />
@@ -236,8 +233,8 @@ export function OrdersDashboard({
             onClick={() => setTab("history")}
             className={`flex items-center gap-2 rounded-lg px-4 py-2.5 text-base font-bold transition-colors ${
               tab === "history"
-                ? "bg-brand-500/15 text-gold-300"
-                : "text-cream/60 hover:text-cream"
+                ? "bg-admin-active-bg text-admin-active-text"
+                : "text-admin-text-muted hover:text-admin-text"
             }`}
           >
             <History size={18} />
@@ -247,8 +244,8 @@ export function OrdersDashboard({
             onClick={() => { setTab("summary"); setSummaryLoading(true); }}
             className={`flex items-center gap-2 rounded-lg px-4 py-2.5 text-base font-bold transition-colors ${
               tab === "summary"
-                ? "bg-brand-500/15 text-gold-300"
-                : "text-cream/60 hover:text-cream"
+                ? "bg-admin-active-bg text-admin-active-text"
+                : "text-admin-text-muted hover:text-admin-text"
             }`}
           >
             <BarChart3 size={18} />
@@ -262,7 +259,7 @@ export function OrdersDashboard({
               <select
                 value={branchFilter}
                 onChange={(e) => setBranchFilter(e.target.value)}
-                className="rounded-lg border border-white/10 bg-ink-900 px-3 py-2.5 text-sm font-bold text-cream"
+                className="rounded-lg border border-admin-border bg-admin-surface px-3 py-2.5 text-sm font-bold text-admin-text"
               >
                 <option value="all">{t.allBranches}</option>
                 {branches.map(([id, b]) => (
@@ -278,15 +275,15 @@ export function OrdersDashboard({
       {tab === "active" && (
         <div className="mt-6">
           {Object.keys(groupedActive).length === 0 && (
-            <div className="rounded-xl border border-dashed border-white/10 p-12 text-center">
-              <p className="text-cream/60 text-base font-bold">{t.noActiveOrders}</p>
-              <p className="mt-1 text-sm text-cream/50">{t.newOrdersAppear}</p>
+            <div className="rounded-xl border border-dashed border-admin-border p-12 text-center">
+              <p className="text-admin-text-muted text-base font-bold">{t.noActiveOrders}</p>
+              <p className="mt-1 text-sm text-admin-text-muted/70">{t.newOrdersAppear}</p>
             </div>
           )}
 
           {Object.entries(groupedActive).map(([groupKey, orders]) => (
             <div key={groupKey} className="mb-6">
-              <h3 className="text-sm font-black text-cream/65 uppercase tracking-wider mb-3">
+              <h3 className="text-sm font-black text-admin-text-muted uppercase tracking-wider mb-3">
                 {groupKey}
               </h3>
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -301,7 +298,7 @@ export function OrdersDashboard({
                     return (
                       <div
                         key={order.id}
-                        className="rounded-xl border border-white/8 bg-ink-900 p-4"
+                        className="rounded-xl border border-admin-border bg-admin-surface p-4"
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-2">
@@ -310,13 +307,13 @@ export function OrdersDashboard({
                               {getTimeAgo(order.submittedAt)}
                             </span>
                           </div>
-                          <span className="text-xl font-black text-gold-300">
+                          <span className="text-xl font-black text-brand-600">
                             {order.items.reduce((s, i) => s + Number(i.priceAtOrder), 0)} LE
                           </span>
                         </div>
 
                         <div className="mt-2">
-                          <span className={`inline-flex items-center rounded-lg border px-2.5 py-1 text-xs font-black ${statusInfo.color}`}>
+                          <span className={`inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-black ${statusInfo.color}`}>
                             {order.status === "submitted" && <Bell size={12} className="mr-1" />}
                             {order.status === "preparing" && <ChefHat size={12} className="mr-1" />}
                             {order.status === "ready" && <PackageCheck size={12} className="mr-1" />}
@@ -328,13 +325,13 @@ export function OrdersDashboard({
                           {order.items.map((item) => (
                             <div key={item.id} className="flex items-center justify-between text-sm">
                               <div className="flex-1 min-w-0">
-                                <span className="font-bold text-cream">
+                                <span className="font-bold text-admin-text">
                                   {item.quantity}x {itemName(item)}
                                 </span>
                                 {item.selectedSize &&
                                   typeof item.selectedSize === "object" &&
                                   item.selectedSize !== null && (
-                                    <span className="text-cream font-bold ml-1">
+                                    <span className="text-admin-text font-bold ml-1">
                                       ({(item.selectedSize as { label?: { ar?: string; en?: string } }).label?.[lang] ?? (item.selectedSize as { label?: { ar?: string; en?: string } }).label?.en ?? ""})
                                     </span>
                                   )}
@@ -343,7 +340,7 @@ export function OrdersDashboard({
                                     {item.presets.map((p: string, idx: number) => (
                                       <span
                                         key={idx}
-                                        className="rounded bg-brand-500/15 px-1.5 py-0.5 text-xs font-bold text-brand-300"
+                                        className="rounded bg-brand-50 px-1.5 py-0.5 text-xs font-bold text-brand-600"
                                       >
                                         {p}
                                       </span>
@@ -351,12 +348,12 @@ export function OrdersDashboard({
                                   </div>
                                 )}
                                 {item.notes && (
-                                  <span className="text-cream/55 italic ml-1 text-sm">
+                                  <span className="text-admin-text-muted italic ml-1 text-sm">
                                     — &quot;{item.notes}&quot;
                                   </span>
                                 )}
                               </div>
-                              <span className="text-cream/65 shrink-0 ml-2 font-bold text-sm">
+                              <span className="text-admin-text-muted shrink-0 ml-2 font-bold text-sm">
                                 {Number(item.priceAtOrder)} LE
                               </span>
                             </div>
@@ -368,7 +365,7 @@ export function OrdersDashboard({
                             <button
                               onClick={() => handleAction(order.id, () => markOrderPreparing(order.id))}
                               disabled={acting === order.id}
-                              className="flex items-center gap-1.5 rounded-lg bg-yellow-500/10 px-3 py-2 text-sm font-bold text-yellow-400 hover:bg-yellow-500/20 transition-colors disabled:opacity-40 min-h-[44px]"
+                              className="flex items-center gap-1.5 rounded-lg bg-amber-50 px-3 py-2 text-sm font-bold text-amber-700 hover:bg-amber-100 transition-colors disabled:opacity-40 min-h-[44px]"
                             >
                               <ChefHat size={16} />
                               {acting === order.id ? "..." : t.preparing}
@@ -378,7 +375,7 @@ export function OrdersDashboard({
                             <button
                               onClick={() => handleAction(order.id, () => markOrderReady(order.id))}
                               disabled={acting === order.id}
-                              className="flex items-center gap-1.5 rounded-lg bg-green-500/10 px-3 py-2 text-sm font-bold text-green-400 hover:bg-green-500/20 transition-colors disabled:opacity-40 min-h-[44px]"
+                              className="flex items-center gap-1.5 rounded-lg bg-emerald-50 px-3 py-2 text-sm font-bold text-emerald-700 hover:bg-emerald-100 transition-colors disabled:opacity-40 min-h-[44px]"
                             >
                               <PackageCheck size={16} />
                               {acting === order.id ? "..." : t.ready}
@@ -388,7 +385,7 @@ export function OrdersDashboard({
                             <button
                               onClick={() => handleAction(order.id, () => markOrderServed(order.id))}
                               disabled={acting === order.id}
-                              className="flex items-center gap-1.5 rounded-lg bg-gold-500/10 px-3 py-2 text-sm font-bold text-gold-300 hover:bg-gold-500/20 transition-colors disabled:opacity-40 min-h-[44px]"
+                              className="flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-2 text-sm font-bold text-blue-700 hover:bg-blue-100 transition-colors disabled:opacity-40 min-h-[44px]"
                             >
                               <CheckCircle2 size={16} />
                               {acting === order.id ? "..." : t.served}
@@ -397,7 +394,7 @@ export function OrdersDashboard({
                           <button
                             onClick={() => handleDelete(order.id)}
                             disabled={acting === order.id}
-                            className="flex items-center gap-1.5 rounded-lg bg-red-500/10 px-3 py-2 text-sm font-bold text-red-400 hover:bg-red-500/20 transition-colors disabled:opacity-40 min-h-[44px]"
+                            className="flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-600 hover:bg-red-100 transition-colors disabled:opacity-40 min-h-[44px]"
                           >
                             {acting === order.id ? "..." : lang === "ar" ? "حذف" : "Delete"}
                           </button>
@@ -415,9 +412,9 @@ export function OrdersDashboard({
       {tab === "history" && (
         <div className="mt-6">
           {filteredServed.length === 0 && (
-            <div className="rounded-xl border border-dashed border-white/10 p-12 text-center">
-              <p className="text-cream/60 text-base font-bold">{t.noServedOrders}</p>
-              <p className="mt-1 text-sm text-cream/50">
+            <div className="rounded-xl border border-dashed border-admin-border p-12 text-center">
+              <p className="text-admin-text-muted text-base font-bold">{t.noServedOrders}</p>
+              <p className="mt-1 text-sm text-admin-text-muted/70">
                 {t.served}... {historyTTL} {lang === "ar" ? "ساعة" : "hours"}
               </p>
             </div>
@@ -426,14 +423,14 @@ export function OrdersDashboard({
             {filteredServed.map((order) => (
               <div
                 key={order.id}
-                className="rounded-xl border border-green-500/10 bg-green-500/5 p-4 opacity-70"
+                className="rounded-xl border border-admin-border bg-admin-surface p-4 opacity-70"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle2 size={16} className="text-green-400" />
-                  <span className="text-sm font-bold text-green-400">
+                  <CheckCircle2 size={16} className="text-emerald-500" />
+                  <span className="text-sm font-bold text-emerald-700">
                     Table {order.table.tableNumber} — {branchName(order.table.branch)}
                   </span>
-                  <span className="text-sm text-cream/55">
+                  <span className="text-sm text-admin-text-muted">
                     {getTimeAgo(order.servedAt)}
                   </span>
                 </div>
@@ -441,18 +438,18 @@ export function OrdersDashboard({
                   {order.items.map((item) => (
                     <div key={item.id} className="flex items-center justify-between text-sm">
                       <div className="flex-1 min-w-0">
-                        <span className="text-cream/55">
+                        <span className="text-admin-text-muted">
                           {item.quantity}x {itemName(item)}
                           {item.selectedSize &&
                             typeof item.selectedSize === "object" &&
                             item.selectedSize !== null && (
-                              <span className="text-cream/75 ml-1">
+                              <span className="text-admin-text ml-1">
                                 ({(item.selectedSize as { label?: { ar?: string; en?: string } }).label?.[lang] ?? (item.selectedSize as { label?: { ar?: string; en?: string } }).label?.en ?? ""})
                               </span>
                             )}
                         </span>
                       </div>
-                      <span className="text-cream/55 shrink-0 ml-2 text-sm">{Number(item.priceAtOrder)} LE</span>
+                      <span className="text-admin-text-muted shrink-0 ml-2 text-sm">{Number(item.priceAtOrder)} LE</span>
                     </div>
                   ))}
                 </div>
@@ -460,7 +457,7 @@ export function OrdersDashboard({
                   <button
                     onClick={() => handleDelete(order.id)}
                     disabled={acting === order.id}
-                    className="text-xs font-bold text-red-400/60 hover:text-red-400 transition-colors disabled:opacity-40"
+                    className="text-xs font-bold text-red-400 hover:text-red-600 transition-colors disabled:opacity-40"
                   >
                     {acting === order.id ? "..." : lang === "ar" ? "حذف" : "Delete"}
                   </button>
@@ -474,24 +471,23 @@ export function OrdersDashboard({
       {/* Summary Tab */}
       {tab === "summary" && (
         <div className="mt-6">
-          {/* Date Picker */}
           <div className="flex items-center gap-3 mb-6">
-            <CalendarDays size={20} className="text-cream/50" />
+            <CalendarDays size={20} className="text-admin-text-muted" />
             <input
               type="date"
               value={summaryDate}
               max={todayStr}
               onChange={(e) => { setSummaryDate(e.target.value); setSummaryLoading(true); }}
-              className="rounded-lg border border-white/10 bg-ink-900 px-4 py-2.5 text-base font-bold text-cream"
+              className="rounded-lg border border-admin-border bg-admin-surface px-4 py-2.5 text-base font-bold text-admin-text"
             />
             {summaryDate === todayStr ? (
-              <span className="rounded-lg bg-green-500/15 px-3 py-1.5 text-sm font-bold text-green-400">
+              <span className="rounded-lg bg-emerald-50 px-3 py-1.5 text-sm font-bold text-emerald-700 border border-emerald-200">
                 {lang === "ar" ? "اليوم" : "Today"}
               </span>
             ) : (
               <button
                 onClick={() => { setSummaryDate(todayStr); setSummaryLoading(true); }}
-                className="rounded-lg bg-white/5 px-3 py-1.5 text-sm font-bold text-cream/50 hover:text-cream transition-colors"
+                className="rounded-lg bg-admin-surface-hover px-3 py-1.5 text-sm font-bold text-admin-text-muted hover:text-admin-text transition-colors"
               >
                 {lang === "ar" ? "العودة لليوم" : "Back to Today"}
               </button>
@@ -499,50 +495,48 @@ export function OrdersDashboard({
           </div>
 
           {summaryLoading ? (
-            <div className="rounded-xl border border-white/8 bg-ink-900 p-12 text-center">
-              <p className="text-base text-cream/60">{lang === "ar" ? "جارٍ التحميل..." : "Loading..."}</p>
+            <div className="rounded-xl border border-admin-border bg-admin-surface p-12 text-center">
+              <p className="text-base text-admin-text-muted">{lang === "ar" ? "جارٍ التحميل..." : "Loading..."}</p>
             </div>
           ) : summaryData ? (
             <>
-              {/* Stats Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-                <div className="rounded-xl border border-white/8 bg-ink-900 p-5">
-                  <p className="text-sm text-cream/60 uppercase">{lang === "ar" ? "الطلبات" : "Orders"}</p>
-                  <p className="text-4xl font-black text-cream mt-1">{summaryData.totalOrders}</p>
+                <div className="rounded-xl border border-admin-border bg-admin-surface p-5">
+                  <p className="text-sm text-admin-text-muted uppercase">{lang === "ar" ? "الطلبات" : "Orders"}</p>
+                  <p className="text-4xl font-black text-admin-text mt-1">{summaryData.totalOrders}</p>
                 </div>
-                <div className="rounded-xl border border-white/8 bg-ink-900 p-5">
-                  <p className="text-sm text-cream/60 uppercase">{lang === "ar" ? "الإيرادات" : "Revenue"}</p>
-                  <p className="text-4xl font-black text-gold-300 mt-1">{summaryData.totalRevenue} <span className="text-lg">LE</span></p>
+                <div className="rounded-xl border border-admin-border bg-admin-surface p-5">
+                  <p className="text-sm text-admin-text-muted uppercase">{lang === "ar" ? "الإيرادات" : "Revenue"}</p>
+                  <p className="text-4xl font-black text-brand-600 mt-1">{summaryData.totalRevenue} <span className="text-lg">LE</span></p>
                 </div>
-                <div className="rounded-xl border border-white/8 bg-ink-900 p-5">
-                  <p className="text-sm text-cream/60 uppercase">{lang === "ar" ? "الأصناف المباعة" : "Items Sold"}</p>
-                  <p className="text-4xl font-black text-cream mt-1">{summaryData.itemsSold}</p>
+                <div className="rounded-xl border border-admin-border bg-admin-surface p-5">
+                  <p className="text-sm text-admin-text-muted uppercase">{lang === "ar" ? "الأصناف المباعة" : "Items Sold"}</p>
+                  <p className="text-4xl font-black text-admin-text mt-1">{summaryData.itemsSold}</p>
                 </div>
-                <div className="rounded-xl border border-white/8 bg-ink-900 p-5">
-                  <p className="text-sm text-cream/60 uppercase">{lang === "ar" ? "متوسط الطلب" : "Avg Order"}</p>
-                  <p className="text-4xl font-black text-cream mt-1">
+                <div className="rounded-xl border border-admin-border bg-admin-surface p-5">
+                  <p className="text-sm text-admin-text-muted uppercase">{lang === "ar" ? "متوسط الطلب" : "Avg Order"}</p>
+                  <p className="text-4xl font-black text-admin-text mt-1">
                     {summaryData.totalOrders > 0 ? Math.round(summaryData.totalRevenue / summaryData.totalOrders) : 0} <span className="text-lg">LE</span>
                   </p>
                 </div>
               </div>
 
               <div className="grid gap-6 sm:grid-cols-2">
-                {/* Top Items */}
                 {summaryData.topItems.length > 0 && (
-                  <div className="rounded-xl border border-white/8 bg-ink-900 p-5">
-                    <h3 className="text-base font-black text-cream/60 uppercase mb-4">
+                  <div className="rounded-xl border border-admin-border bg-admin-surface p-5">
+                    <h3 className="text-base font-black text-admin-text-muted uppercase mb-4">
                       {lang === "ar" ? "الأكثر مبيعًا" : "Top Selling Items"}
                     </h3>
                     <div className="space-y-2">
                       {summaryData.topItems.map((item, idx) => (
-                        <div key={idx} className="flex items-center justify-between rounded-lg bg-white/5 px-4 py-2.5">
+                        <div key={idx} className="flex items-center justify-between rounded-lg bg-admin-surface-hover px-4 py-2.5">
                           <div className="flex items-center gap-3">
-                            <span className="text-sm font-black text-cream/55 w-6">#{idx + 1}</span>
-                            <span className="text-base font-bold text-cream">{lang === "ar" ? item.nameAr : item.nameEn}</span>
+                            <span className="text-sm font-black text-admin-text-muted/55 w-6">#{idx + 1}</span>
+                            <span className="text-base font-bold text-admin-text">{lang === "ar" ? item.nameAr : item.nameEn}</span>
                           </div>
                           <div className="flex items-center gap-4">
-                            <span className="text-sm text-cream/60">×{item.quantity}</span>
-                            <span className="text-base font-bold text-gold-300">{item.revenue} LE</span>
+                            <span className="text-sm text-admin-text-muted">×{item.quantity}</span>
+                            <span className="text-base font-bold text-brand-600">{item.revenue} LE</span>
                           </div>
                         </div>
                       ))}
@@ -550,19 +544,18 @@ export function OrdersDashboard({
                   </div>
                 )}
 
-                {/* Branch Stats */}
                 {summaryData.branchStats.length > 0 && (
-                  <div className="rounded-xl border border-white/8 bg-ink-900 p-5">
-                    <h3 className="text-base font-black text-cream/60 uppercase mb-4">
+                  <div className="rounded-xl border border-admin-border bg-admin-surface p-5">
+                    <h3 className="text-base font-black text-admin-text-muted uppercase mb-4">
                       {lang === "ar" ? "الطلبات حسب الفرع" : "Orders by Branch"}
                     </h3>
                     <div className="space-y-2">
                       {summaryData.branchStats.map((branch, idx) => (
-                        <div key={idx} className="flex items-center justify-between rounded-lg bg-white/5 px-4 py-2.5">
-                          <span className="text-base font-bold text-cream">{lang === "ar" ? branch.nameAr : branch.nameEn}</span>
+                        <div key={idx} className="flex items-center justify-between rounded-lg bg-admin-surface-hover px-4 py-2.5">
+                          <span className="text-base font-bold text-admin-text">{lang === "ar" ? branch.nameAr : branch.nameEn}</span>
                           <div className="flex items-center gap-4">
-                            <span className="text-sm text-cream/60">{branch.count} {lang === "ar" ? "طلب" : "orders"}</span>
-                            <span className="text-base font-bold text-gold-300">{branch.revenue} LE</span>
+                            <span className="text-sm text-admin-text-muted">{branch.count} {lang === "ar" ? "طلب" : "orders"}</span>
+                            <span className="text-base font-bold text-brand-600">{branch.revenue} LE</span>
                           </div>
                         </div>
                       ))}
@@ -572,8 +565,8 @@ export function OrdersDashboard({
               </div>
 
               {summaryData.totalOrders === 0 && (
-                <div className="rounded-xl border border-dashed border-white/10 p-12 text-center">
-                  <p className="text-cream/60 text-base font-bold">
+                <div className="rounded-xl border border-dashed border-admin-border p-12 text-center">
+                  <p className="text-admin-text-muted text-base font-bold">
                     {lang === "ar" ? "لا توجد طلبات في هذا اليوم" : "No orders on this day"}
                   </p>
                 </div>

@@ -43,7 +43,9 @@ export function Sidebar() {
   function linkClass(href: string) {
     const active = pathname === href || (href !== "/admin" && pathname.startsWith(href));
     return `flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold transition-colors ${
-      active ? "bg-brand-500/15 text-gold-300" : "text-cream/55 hover:bg-white/5 hover:text-cream"
+      active
+        ? "bg-admin-active-bg text-admin-active-text"
+        : "text-admin-text-muted hover:bg-admin-surface-hover hover:text-admin-text"
     }`;
   }
 
@@ -54,9 +56,9 @@ export function Sidebar() {
 
   const navContent = (
     <>
-      <div className="flex items-center gap-3 border-b border-white/8 px-5 py-5">
+      <div className="flex items-center gap-3 border-b border-admin-border px-5 py-5">
          <Image src={logo} alt="" width={40} height={40} className="rounded-full" />
-        <span className="text-sm font-black text-cream">{ta.adminPanel}</span>
+        <span className="text-sm font-black text-admin-text">{ta.adminPanel}</span>
       </div>
       <nav className="flex-1 space-y-1 p-3">
         {links.map(({ href, label, icon: Icon }) => (
@@ -71,16 +73,16 @@ export function Sidebar() {
           </Link>
         ))}
       </nav>
-      <div className="border-t border-white/8 p-3">
-        <button onClick={toggleLang} className="mb-1 flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-cream/65 hover:bg-white/5 hover:text-cream">
+      <div className="border-t border-admin-border p-3">
+        <button onClick={toggleLang} className="mb-1 flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-admin-text-muted hover:bg-admin-surface-hover hover:text-admin-text">
           <Languages size={18} />
           {ta.language}
         </button>
-        <a href="/" target="_blank" className="mb-1 flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-cream/65 hover:bg-white/5 hover:text-cream">
+        <a href="/" target="_blank" className="mb-1 flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-admin-text-muted hover:bg-admin-surface-hover hover:text-admin-text">
           <Flame size={18} />
           {ta.viewSite}
         </a>
-        <button onClick={() => signOut()} className="flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-cream/65 hover:bg-white/5 hover:text-cream">
+        <button onClick={() => signOut()} className="flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-admin-text-muted hover:bg-admin-surface-hover hover:text-admin-text">
           <LogOut size={18} />
           {ta.signOut}
         </button>
@@ -92,7 +94,7 @@ export function Sidebar() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed top-4 left-4 z-50 rounded-lg bg-ink-900 border border-white/10 p-2 text-cream lg:hidden"
+        className="fixed top-4 left-4 z-50 rounded-lg bg-admin-surface border border-admin-border p-2 text-admin-text shadow-sm lg:hidden"
         aria-label="Open menu"
       >
         <Menu size={22} />
@@ -100,23 +102,23 @@ export function Sidebar() {
 
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/30 lg:hidden"
           onClick={() => setOpen(false)}
         />
       )}
 
-      <aside className="hidden lg:flex w-64 flex-col border-e border-white/8 bg-ink-900 shrink-0">
+      <aside className="hidden lg:flex w-64 flex-col border-e border-admin-border bg-admin-surface shrink-0">
         {navContent}
       </aside>
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-ink-900 border-e border-white/8 transition-transform duration-200 lg:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-admin-surface border-e border-admin-border shadow-xl transition-transform duration-200 lg:hidden ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <button
           onClick={() => setOpen(false)}
-          className="absolute top-4 right-4 rounded-lg p-1 text-cream/55 hover:text-cream"
+          className="absolute top-4 right-4 rounded-lg p-1 text-admin-text-muted hover:text-admin-text"
           aria-label="Close menu"
         >
           <X size={20} />

@@ -8,11 +8,11 @@ export const dynamic = "force-dynamic";
 export default async function AdminBranches() {
   const branches = await prisma.branch.findMany({ orderBy: { id: "asc" } });
   return (
-    <div className="flex min-h-screen bg-ink-950">
+    <div className="flex min-h-screen bg-admin-bg">
       <Sidebar />
       <main className="flex-1 p-4 pt-16 lg:p-8 lg:pt-8">
-        <h1 className="text-2xl font-black text-cream"><T k="branchesTitle" /></h1>
-        <p className="mt-1 text-sm text-cream/65">{branches.length} <T k="branches" /></p>
+        <h1 className="text-2xl font-black text-admin-text"><T k="branchesTitle" /></h1>
+        <p className="mt-1 text-sm text-admin-text-muted">{branches.length} <T k="branches" /></p>
         <BranchesEditor branches={branches} />
       </main>
     </div>

@@ -45,6 +45,15 @@
   --color-saffron-700: #9b6504;
   --color-paper: #fff8e9;
   --color-paper-warm: #f2e6d0;
+  --color-admin-bg: #f5efe6;
+  --color-admin-surface: #fffdf8;
+  --color-admin-surface-hover: #f0e8da;
+  --color-admin-text: #1a1f36;
+  --color-admin-text-muted: #5a607a;
+  --color-admin-border: #e4ddd2;
+  --color-admin-active-bg: #c1272d14;
+  --color-admin-active-text: #c1272d;
+  --color-admin-input-bg: #faf7f0;
   --font-sans: var(--font-cairo);
   --shadow-red-glow: 0 18px 55px -22px rgb(193 39 45 / 0.7);
   --shadow-gold-glow: 0 18px 55px -22px rgb(232 156 28 / 0.55);
@@ -474,9 +483,11 @@ img { max-width: 100%; }
 .site-footer small { width: min(100%, 1000px); padding-top: 22px; color: rgb(255 246 227 / 0.36); border-top: 1px solid var(--public-line); }
 
 /* Admin utility buttons and surfaces used by the imported dashboard. */
-.btn-primary { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 8px; padding: 9px 18px; color: #fff8e9; border: 0; border-radius: 8px; background: #e53222; box-shadow: 0 3px 0 #a91f14; font-weight: 800; cursor: pointer; }
-.btn-ghost { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 8px; padding: 9px 16px; color: #263257; border: 1px solid rgb(16 21 47 / 0.14); border-radius: 8px; background: #fff8e9; font-weight: 800; cursor: pointer; }
-.bg-paper-texture { background-color: #fff8e9; background-image: radial-gradient(rgb(16 21 47 / 0.04) 1px, transparent 1px); background-size: 24px 24px; }
+.btn-primary { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 8px; padding: 9px 18px; color: #fff; border: 0; border-radius: 10px; background: #c1272d; font-weight: 800; cursor: pointer; transition: background 180ms ease, transform 160ms ease; }
+.btn-primary:hover { background: #a91f23; transform: translateY(-1px); }
+.btn-ghost { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 8px; padding: 9px 16px; color: #1a1f36; border: 1px solid #e4ddd2; border-radius: 10px; background: #fffdf8; font-weight: 800; cursor: pointer; transition: background 180ms ease, border-color 180ms ease; }
+.btn-ghost:hover { background: #f0e8da; border-color: #d4cdc2; }
+.bg-paper-texture { background-color: #f5efe6; background-image: radial-gradient(#e4ddd2 1px, transparent 1px); background-size: 24px 24px; }
 .display { font-weight: 900; letter-spacing: -0.035em; }
 
 @media (max-width: 980px) {

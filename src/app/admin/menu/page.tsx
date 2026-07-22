@@ -22,7 +22,7 @@ export default async function MenuPage() {
   });
 
   return (
-    <div className="flex min-h-screen bg-ink-950">
+    <div className="flex min-h-screen bg-admin-bg">
       <Sidebar />
       <main className="flex-1 p-4 pt-16 lg:p-10 lg:pt-10">
         <MenuContent categories={JSON.parse(JSON.stringify(categories))} />
