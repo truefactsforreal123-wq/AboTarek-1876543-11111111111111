@@ -30,7 +30,7 @@ export function Preloader() {
             transition={{ duration: 0.75, ease: "backOut" }}
             className="preloader-logo"
           >
-            <Image src={logo} alt="" fill priority sizes="260px" />
+            <Image src={logo} alt="" fill priority sizes="180px" />
           </motion.div>
           <p>من قلب القاهرة</p>
           <div className="preloader-line" />

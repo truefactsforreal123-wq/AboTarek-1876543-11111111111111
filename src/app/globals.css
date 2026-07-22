@@ -288,10 +288,10 @@ img { max-width: 100%; }
 }
 .preloader-logo {
   position: relative;
-  width: clamp(150px, 24vw, 250px);
+  width: clamp(100px, 16vw, 180px);
   aspect-ratio: 1;
   overflow: hidden;
-  border: 5px solid var(--public-gold);
+  border: 4px solid var(--public-gold);
   border-radius: 32%;
   background: #fff;
   box-shadow: 0 0 0 10px rgb(229 50 34 / 0.2), 0 30px 80px rgb(0 0 0 / 0.45);
