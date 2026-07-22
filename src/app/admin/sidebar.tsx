@@ -44,8 +44,8 @@ export function Sidebar() {
     const active = pathname === href || (href !== "/admin" && pathname.startsWith(href));
     return `flex min-h-11 items-center gap-3 rounded-lg px-3 text-[13px] font-semibold transition-colors ${
       active
-        ? "bg-admin-active-bg text-admin-active-text font-bold"
-        : "text-gray-900 hover:bg-admin-surface-hover"
+        ? "bg-admin-active-bg font-bold"
+        : "hover:bg-admin-surface-hover"
     }`;
   }
 
@@ -55,10 +55,10 @@ export function Sidebar() {
   }
 
   const navContent = (
-    <>
+    <div style={{ color: '#111827' }}>
       <div className="flex items-center gap-3 border-b border-admin-border px-5 py-5">
          <Image src={logo} alt="" width={40} height={40} className="rounded-full" />
-        <span className="text-sm font-black text-gray-900">{ta.adminPanel}</span>
+        <span className="text-sm font-black">{ta.adminPanel}</span>
       </div>
       <nav className="flex-1 space-y-1 p-3">
         {links.map(({ href, label, icon: Icon }) => (
@@ -74,27 +74,28 @@ export function Sidebar() {
         ))}
       </nav>
       <div className="border-t border-admin-border p-3">
-        <button onClick={toggleLang} className="mb-1 flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-gray-900 hover:bg-admin-surface-hover">
+        <button onClick={toggleLang} className="mb-1 flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold hover:bg-admin-surface-hover">
           <Languages size={20} />
           {ta.language}
         </button>
-        <a href="/" target="_blank" className="mb-1 flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-gray-900 hover:bg-admin-surface-hover">
+        <a href="/" target="_blank" className="mb-1 flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold hover:bg-admin-surface-hover">
           <Flame size={20} />
           {ta.viewSite}
         </a>
-        <button onClick={() => signOut()} className="flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold text-gray-900 hover:bg-admin-surface-hover">
+        <button onClick={() => signOut()} className="flex w-full min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-bold hover:bg-admin-surface-hover">
           <LogOut size={20} />
           {ta.signOut}
         </button>
       </div>
-    </>
+    </div>
   );
 
   return (
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed top-4 left-4 z-50 rounded-lg bg-admin-surface border border-admin-border p-2 text-gray-900 shadow-sm lg:hidden"
+        className="fixed top-4 left-4 z-50 rounded-lg bg-admin-surface border border-admin-border p-2 shadow-sm lg:hidden"
+        style={{ color: '#111827' }}
         aria-label="Open menu"
       >
         <Menu size={22} />
@@ -118,7 +119,8 @@ export function Sidebar() {
       >
         <button
           onClick={() => setOpen(false)}
-          className="absolute top-4 right-4 rounded-lg p-1 text-gray-900 hover:bg-admin-surface-hover"
+          className="absolute top-4 right-4 rounded-lg p-1 hover:bg-admin-surface-hover"
+          style={{ color: '#111827' }}
           aria-label="Close menu"
         >
           <X size={20} />
