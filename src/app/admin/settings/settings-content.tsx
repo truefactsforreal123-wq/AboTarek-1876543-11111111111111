@@ -79,8 +79,8 @@ export function SettingsContent({ initialSettings }: Props) {
       </div>
 
       <form onSubmit={save} className="space-y-6">
-        {/* TTL */}
-        <div className="rounded-lg border border-admin-border bg-admin-surface p-6">
+        {/* TTL — hidden from UI, kept for backend */}
+        <div hidden className="rounded-lg border border-admin-border bg-admin-surface p-6">
           <div className="flex items-start gap-4">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-amber-50 text-amber-600">
               <Clock className="h-5 w-5" />
