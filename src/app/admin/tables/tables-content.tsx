@@ -46,6 +46,11 @@ export function TablesContent({ tables: initialTables, branches }: Props) {
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const [actingId, setActingId] = useState<string | null>(null);
 
+  // Sync local state when server re-renders after router.refresh()
+  useEffect(() => {
+    setTables(initialTables); // eslint-disable-line react-hooks/set-state-in-effect
+  }, [initialTables]);
+
   const filtered =
     branchFilter === "all" ? tables : tables.filter((t) => t.branchId === branchFilter);
 
